@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react"
 import { useApp } from "@/lib/app-context"
 import { CAREER_GOALS } from "@/lib/roadmap-data"
 import { Send, Bot, User, Zap, RotateCcw } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
 
 interface Message {
   id: string
@@ -205,85 +206,124 @@ export function MentorPage() {
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4 glass rounded-none"
         style={{ minHeight: 0 }}>
-        {messages.map((msg) => (
-          <div key={msg.id} className={`flex gap-3 ${msg.role === "user" ? "flex-row-reverse" : "flex-row"}`}>
-            {/* Avatar */}
-            <div
-              className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5"
-              style={
-                msg.role === "mentor"
-                  ? { background: "var(--primary)", color: "var(--primary-foreground)" }
-                  : { background: "var(--secondary)", color: "var(--secondary-foreground)" }
-              }
+        <AnimatePresence mode="popLayout">
+          {messages.map((msg) => (
+            <motion.div
+              key={msg.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className={`flex gap-3 ${msg.role === "user" ? "flex-row-reverse" : "flex-row"}`}
             >
-              {msg.role === "mentor" ? <Bot className="w-3.5 h-3.5" /> : <User className="w-3.5 h-3.5" />}
-            </div>
-
-            {/* Bubble */}
-            <div
-              className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${
-                msg.role === "user"
-                  ? "rounded-tr-sm"
-                  : "rounded-tl-sm"
-              }`}
-              style={
-                msg.role === "user"
-                  ? { background: "var(--primary)", color: "var(--primary-foreground)" }
-                  : { background: "var(--card)", color: "var(--foreground)", border: "1px solid var(--border)" }
-              }
-            >
-              {renderText(msg.text)}
-              <p className="text-xs mt-1.5 opacity-50">
-                {msg.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-              </p>
-            </div>
-          </div>
-        ))}
-
-        {/* Loading indicator */}
-        {loading && (
-          <div className="flex gap-3">
-            <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
-              style={{ background: "var(--primary)", color: "var(--primary-foreground)" }}>
-              <Bot className="w-3.5 h-3.5" />
-            </div>
-            <div className="px-4 py-3 rounded-2xl rounded-tl-sm"
-              style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
-              <div className="flex gap-1 items-center h-4">
-                {[0, 1, 2].map((i) => (
-                  <div
-                    key={i}
-                    className="w-1.5 h-1.5 rounded-full animate-bounce"
-                    style={{
-                      background: "var(--muted-foreground)",
-                      animationDelay: `${i * 0.15}s`,
-                    }}
-                  />
-                ))}
+              {/* Avatar */}
+              <div
+                className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5"
+                style={
+                  msg.role === "mentor"
+                    ? { background: "var(--primary)", color: "var(--primary-foreground)" }
+                    : { background: "var(--secondary)", color: "var(--secondary-foreground)" }
+                }
+              >
+                {msg.role === "mentor" ? <Bot className="w-3.5 h-3.5" /> : <User className="w-3.5 h-3.5" />}
               </div>
-            </div>
-          </div>
-        )}
+
+              {/* Bubble with typing animation */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.2 }}
+                className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${
+                  msg.role === "user"
+                    ? "rounded-tr-sm"
+                    : "rounded-tl-sm"
+                }`}
+                style={
+                  msg.role === "user"
+                    ? { background: "var(--primary)", color: "var(--primary-foreground)" }
+                    : { background: "var(--card)", color: "var(--foreground)", border: "1px solid var(--border)" }
+                }
+              >
+                {renderText(msg.text)}
+                <p className="text-xs mt-1.5 opacity-50">
+                  {msg.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                </p>
+              </motion.div>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+
+        {/* Loading indicator with enhanced animation */}
+        <AnimatePresence>
+          {loading && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              className="flex gap-3"
+            >
+              <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
+                style={{ background: "var(--primary)", color: "var(--primary-foreground)" }}>
+                <Bot className="w-3.5 h-3.5" />
+              </div>
+              <div className="px-4 py-3 rounded-2xl rounded-tl-sm"
+                style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
+                <div className="flex gap-1 items-center h-4">
+                  {[0, 1, 2].map((i) => (
+                    <motion.div
+                      key={i}
+                      className="w-1.5 h-1.5 rounded-full"
+                      style={{
+                        background: "var(--muted-foreground)",
+                      }}
+                      animate={{
+                        y: [0, -6, 0],
+                        opacity: [0.4, 1, 0.4],
+                      }}
+                      transition={{
+                        duration: 1.2,
+                        repeat: Infinity,
+                        delay: i * 0.15,
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <div ref={bottomRef} />
       </div>
 
-      {/* Suggestions */}
-      {messages.length <= 2 && (
-        <div className="flex-shrink-0 px-4 py-2 glass flex gap-2 overflow-x-auto"
-          style={{ borderTop: "1px solid var(--border)" }}>
-          {SUGGESTIONS.map((s) => (
-            <button
-              key={s}
-              onClick={() => { setInput(s); inputRef.current?.focus() }}
-              className="flex-shrink-0 px-3 py-1.5 rounded-full text-xs border transition-colors hover:border-primary/50 hover:text-foreground text-muted-foreground"
-              style={{ background: "var(--muted)", borderColor: "var(--border)" }}
-            >
-              {s}
-            </button>
-          ))}
-        </div>
-      )}
+      {/* Suggestions with animations */}
+      <AnimatePresence>
+        {messages.length <= 2 && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            className="flex-shrink-0 px-4 py-2 glass flex gap-2 overflow-x-auto"
+            style={{ borderTop: "1px solid var(--border)" }}
+          >
+            {SUGGESTIONS.map((s, idx) => (
+              <motion.button
+                key={s}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: idx * 0.1 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => { setInput(s); inputRef.current?.focus() }}
+                className="flex-shrink-0 px-3 py-1.5 rounded-full text-xs border transition-colors hover:border-primary/50 hover:text-foreground text-muted-foreground"
+                style={{ background: "var(--muted)", borderColor: "var(--border)" }}
+              >
+                {s}
+              </motion.button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Input */}
       <div className="flex-shrink-0 flex gap-2 p-3 glass rounded-b-2xl"
@@ -297,15 +337,17 @@ export function MentorPage() {
           onKeyDown={handleKey}
           className="flex-1 px-4 py-2.5 rounded-xl text-sm bg-input border border-border text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
         />
-        <button
+        <motion.button
           onClick={send}
           disabled={!input.trim() || loading}
-          className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200 hover:opacity-90 active:scale-95 disabled:opacity-40"
+          whileHover={{ scale: !input.trim() || loading ? 1 : 1.05 }}
+          whileTap={{ scale: !input.trim() || loading ? 1 : 0.95 }}
+          className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200 disabled:opacity-40"
           style={{ background: "var(--primary)", color: "var(--primary-foreground)" }}
           aria-label="Send message"
         >
           <Send className="w-4 h-4" />
-        </button>
+        </motion.button>
       </div>
     </div>
   )

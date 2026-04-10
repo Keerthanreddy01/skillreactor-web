@@ -4,6 +4,7 @@ import { useApp } from "@/lib/app-context"
 import { CAREER_GOALS } from "@/lib/roadmap-data"
 import { CheckCircle2, Circle, Clock, ExternalLink, ChevronDown, ChevronUp, BookOpen } from "lucide-react"
 import { useState } from "react"
+import { motion } from "framer-motion"
 
 export function RoadmapPage() {
   const { roadmapSteps, completedSteps, toggleStepComplete, profile, getProgressPercent } = useApp()
@@ -27,7 +28,12 @@ export function RoadmapPage() {
   return (
     <div className="flex flex-col gap-6 max-w-3xl mx-auto">
       {/* Header */}
-      <div className="glass rounded-2xl p-5">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="glass rounded-2xl p-5"
+      >
         <div className="flex items-start justify-between gap-4 mb-4">
           <div>
             <h2 className="text-xl font-bold text-foreground mb-1">{goalInfo?.label} Roadmap</h2>
@@ -41,19 +47,25 @@ export function RoadmapPage() {
           </div>
         </div>
         <div className="h-2 rounded-full overflow-hidden" style={{ background: "var(--border)" }}>
-          <div
-            className="h-full rounded-full transition-all duration-700"
-            style={{ width: `${progress}%`, background: "var(--primary)" }}
+          <motion.div
+            initial={{ width: 0 }}
+            animate={{ width: `${progress}%` }}
+            transition={{ duration: 1.2, ease: "easeOut" }}
+            className="h-full rounded-full"
+            style={{ background: "var(--primary)" }}
           />
         </div>
-      </div>
+      </motion.div>
 
       {/* Timeline */}
       <div className="relative">
-        {/* Vertical line */}
-        <div
+        {/* Animated vertical line */}
+        <motion.div
           className="absolute left-5 top-0 bottom-0 w-px"
           style={{ background: "var(--border)" }}
+          initial={{ scaleY: 0 }}
+          animate={{ scaleY: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
         />
 
         <div className="flex flex-col gap-3">
@@ -63,29 +75,82 @@ export function RoadmapPage() {
             const isNext = !done && roadmapSteps.findIndex((s) => !completedSteps[s.id]) === idx
 
             return (
-              <div key={step.id} className="relative pl-14">
-                {/* Circle indicator */}
-                <button
+              <motion.div
+                key={step.id}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: idx * 0.05 }}
+                className="relative pl-14"
+              >
+                {/* Circle indicator with pulse animation */}
+                <motion.button
                   onClick={() => toggleStepComplete(step.id)}
                   className="absolute left-2.5 top-5 -translate-y-1/2 z-10 transition-all duration-200 hover:scale-110"
                   aria-label={done ? "Mark incomplete" : "Mark complete"}
+                  whileHover={{ scale: 1.2 }}
+                  whileTap={{ scale: 0.9 }}
                 >
                   {done ? (
-                    <CheckCircle2 className="w-5 h-5" style={{ color: "var(--primary)" }} />
+                    <motion.div
+                      animate={{ scale: [1, 1.2, 1] }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                    >
+                      <CheckCircle2 className="w-5 h-5" style={{ color: "var(--primary)" }} />
+                    </motion.div>
                   ) : (
-                    <Circle className={`w-5 h-5 ${isNext ? "text-primary" : "text-muted-foreground/50"}`} />
+                    <>
+                      {isNext && (
+                        <motion.div
+                          className="absolute inset-0 rounded-full"
+                          style={{ border: "2px solid var(--primary)" }}
+                          animate={{
+                            scale: [1, 1.3, 1],
+                            opacity: [0.8, 0, 0.8],
+                          }}
+                          transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                          }}
+                        />
+                      )}
+                      <Circle
+                        className={`w-5 h-5 ${isNext ? "text-primary" : "text-muted-foreground/50"}`}
+                      />
+                    </>
                   )}
-                </button>
+                </motion.button>
 
-                {/* Card */}
-                <div
+                {/* Card with glow effect for next step */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: idx * 0.05 + 0.1 }}
+                  whileHover={isNext ? { y: -4 } : {}}
                   className={`glass rounded-2xl border transition-all duration-200 overflow-hidden ${
-                    done ? "opacity-70" : isNext ? "border-primary/30 glow" : ""
+                    done ? "opacity-70" : isNext ? "border-primary/30" : ""
                   }`}
-                  style={isNext ? { boxShadow: "0 0 12px var(--glow-color)" } : {}}
+                  style={isNext ? { boxShadow: "0 0 20px var(--glow-color)" } : {}}
                 >
+                  {/* Animated glow background for next step */}
+                  {isNext && (
+                    <motion.div
+                      className="absolute top-0 right-0 w-32 h-32 rounded-full blur-2xl pointer-events-none"
+                      style={{ background: "var(--primary)" }}
+                      animate={{
+                        scale: [1, 1.1, 1],
+                        opacity: [0.05, 0.1, 0.05],
+                      }}
+                      transition={{
+                        duration: 3,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                    />
+                  )}
+
                   {/* Card header */}
-                  <div className="p-4">
+                  <div className="p-4 relative z-10">
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2 flex-wrap mb-1">
@@ -93,12 +158,14 @@ export function RoadmapPage() {
                             {String(idx + 1).padStart(2, "0")}
                           </span>
                           {isNext && (
-                            <span
+                            <motion.span
+                              initial={{ opacity: 0, scale: 0.8 }}
+                              animate={{ opacity: 1, scale: 1 }}
                               className="text-xs px-2 py-0.5 rounded-full font-medium"
                               style={{ background: "var(--primary)", color: "var(--primary-foreground)" }}
                             >
                               Up Next
-                            </span>
+                            </motion.span>
                           )}
                           {done && (
                             <span
@@ -109,7 +176,11 @@ export function RoadmapPage() {
                             </span>
                           )}
                         </div>
-                        <h3 className={`font-semibold ${done ? "line-through text-muted-foreground" : "text-foreground"}`}>
+                        <h3
+                          className={`font-semibold ${
+                            done ? "line-through text-muted-foreground" : "text-foreground"
+                          }`}
+                        >
                           {step.title}
                         </h3>
                         <div className="flex items-center gap-1 mt-1 text-xs text-muted-foreground">
@@ -118,17 +189,21 @@ export function RoadmapPage() {
                         </div>
                       </div>
                       <div className="flex items-center gap-2 flex-shrink-0">
-                        <button
+                        <motion.button
                           onClick={() => toggleStepComplete(step.id)}
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
                           className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 ${
                             done
                               ? "bg-muted text-muted-foreground hover:bg-destructive/20 hover:text-destructive-foreground"
                               : "hover:opacity-90"
                           }`}
-                          style={!done ? { background: "var(--primary)", color: "var(--primary-foreground)" } : {}}
+                          style={
+                            !done ? { background: "var(--primary)", color: "var(--primary-foreground)" } : {}
+                          }
                         >
                           {done ? "Undo" : "Mark Done"}
-                        </button>
+                        </motion.button>
                         <button
                           onClick={() => setExpanded(isExpanded ? null : step.id)}
                           className="text-muted-foreground hover:text-foreground transition-colors p-1"
@@ -141,27 +216,42 @@ export function RoadmapPage() {
 
                   {/* Expanded details */}
                   {isExpanded && (
-                    <div className="px-4 pb-4" style={{ borderTop: "1px solid var(--border)" }}>
-                      <p className="text-muted-foreground text-sm leading-relaxed mt-3 mb-3">{step.description}</p>
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="px-4 pb-4 relative z-10"
+                      style={{ borderTop: "1px solid var(--border)" }}
+                    >
+                      <p className="text-muted-foreground text-sm leading-relaxed mt-3 mb-3">
+                        {step.description}
+                      </p>
                       <div>
                         <p className="text-xs font-semibold text-foreground mb-2">Resources</p>
                         <div className="flex flex-wrap gap-2">
                           {step.resources.map((r) => (
-                            <span
+                            <motion.span
                               key={r}
+                              initial={{ opacity: 0, scale: 0.8 }}
+                              animate={{ opacity: 1, scale: 1 }}
                               className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs border transition-colors hover:border-primary/50"
-                              style={{ background: "var(--muted)", borderColor: "var(--border)", color: "var(--foreground)" }}
+                              style={{
+                                background: "var(--muted)",
+                                borderColor: "var(--border)",
+                                color: "var(--foreground)",
+                              }}
                             >
                               <ExternalLink className="w-3 h-3 text-muted-foreground" />
                               {r}
-                            </span>
+                            </motion.span>
                           ))}
                         </div>
                       </div>
-                    </div>
+                    </motion.div>
                   )}
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
             )
           })}
         </div>

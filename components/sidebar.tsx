@@ -14,6 +14,7 @@ import {
   Target,
   X,
 } from "lucide-react"
+import { motion } from "framer-motion"
 
 const NAV_ITEMS: { label: string; page: Page; icon: React.ReactNode }[] = [
   { label: "Dashboard", page: "dashboard", icon: <LayoutDashboard className="w-4 h-4" /> },
@@ -83,22 +84,47 @@ export function Sidebar({ mobile, onClose }: SidebarProps) {
         {NAV_ITEMS.map((item) => {
           const active = currentPage === item.page
           return (
-            <button
+            <motion.button
               key={item.page}
               onClick={() => navigate(item.page)}
-              className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group ${
+              whileHover={{ x: 4 }}
+              whileTap={{ scale: 0.95 }}
+              className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group relative ${
                 active
                   ? "text-primary-foreground"
                   : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground"
               }`}
               style={active ? { background: "var(--primary)" } : {}}
             >
-              <span className={active ? "text-primary-foreground" : "text-muted-foreground group-hover:text-foreground transition-colors"}>
+              {/* Animated active indicator */}
+              {active && (
+                <motion.div
+                  className="absolute inset-0 rounded-xl pointer-events-none"
+                  style={{ background: "var(--primary)" }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: [0.3, 0.1, 0.3] }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                />
+              )}
+              <span className={`relative z-10 ${active ? "text-primary-foreground" : "text-muted-foreground group-hover:text-foreground transition-colors"}`}>
                 {item.icon}
               </span>
-              {item.label}
-              {active && <ChevronRight className="w-3 h-3 ml-auto" />}
-            </button>
+              <span className="relative z-10">{item.label}</span>
+              {active && (
+                <motion.div
+                  initial={{ opacity: 0, x: -4 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -4 }}
+                  className="relative z-10 ml-auto"
+                >
+                  <ChevronRight className="w-3 h-3" />
+                </motion.div>
+              )}
+            </motion.button>
           )
         })}
 
