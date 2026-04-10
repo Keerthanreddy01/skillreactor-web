@@ -45,11 +45,14 @@ function Navbar() {
             : "bg-white/80 shadow-lg shadow-black/5 backdrop-blur-md"
         }`}
       >
-        {/* Logo mark */}
-        <Link href="/" className="flex items-center gap-2 pl-1 pr-2">
+        {/* Logo mark + Brand name */}
+        <Link href="/" className="flex items-center gap-2 pl-1 pr-4">
           <div className="w-9 h-9 rounded-full bg-gray-900 flex items-center justify-center flex-shrink-0">
             <Zap className="w-4 h-4 text-white" />
           </div>
+          <span className="font-bold text-gray-900 text-base tracking-tight hidden sm:inline">
+            SkillReactor
+          </span>
         </Link>
 
         {/* Links */}
@@ -136,7 +139,7 @@ function HeroSection() {
         >
           <span style={{ color: "#f59e0b", fontSize: "1rem" }}>&#9733;</span>
           <span className="text-sm font-semibold text-gray-700 tracking-widest uppercase">
-            From Strategy to Success
+            Personalized Skill Roadmap Generator
           </span>
         </motion.div>
 
