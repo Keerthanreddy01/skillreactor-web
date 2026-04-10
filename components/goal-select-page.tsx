@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useApp } from "@/lib/app-context"
 import { CAREER_GOALS, type CareerGoal, type SkillLevel } from "@/lib/roadmap-data"
 import { BarChart2, Brain, Code2, Cloud, Shield, CheckCircle2, ArrowRight, Clock } from "lucide-react"
+import { motion } from "framer-motion"
 
 const ICONS: Record<string, React.ReactNode> = {
   BarChart2: <BarChart2 className="w-6 h-6" />,
@@ -27,107 +28,162 @@ export function GoalSelectPage() {
   }
 
   return (
-    <div className="min-h-full flex flex-col items-center justify-center py-8 px-4">
-      <div className="w-full max-w-2xl">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex flex-col items-center justify-center py-8 px-4 relative overflow-hidden">
+      {/* Background glow */}
+      <motion.div
+        className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-10 blur-3xl pointer-events-none"
+        animate={{ scale: [1, 1.2, 1] }}
+        transition={{ duration: 15, repeat: Infinity }}
+        style={{ background: "linear-gradient(135deg, #0066ff, #00b4ff)" }}
+      />
+      <motion.div
+        className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full opacity-8 blur-3xl pointer-events-none"
+        animate={{ scale: [1.2, 1, 1.2] }}
+        transition={{ duration: 20, repeat: Infinity }}
+        style={{ background: "linear-gradient(135deg, #a855f7, #ec4899)" }}
+      />
+
+      <div className="w-full max-w-2xl relative z-10">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 mb-3 px-3 py-1 rounded-full text-xs font-medium border"
-            style={{ borderColor: "var(--border)", background: "var(--card)", color: "var(--primary)" }}>
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-8"
+        >
+          <div className="inline-flex items-center gap-2 mb-3 px-4 py-2 rounded-full text-xs font-bold border-2 border-blue-200 bg-white/60 backdrop-blur-sm">
+            <span className="w-2 h-2 rounded-full bg-gradient-to-r from-blue-600 to-purple-600" />
             Step {step} of 2
           </div>
-          <h2 className="text-3xl font-bold text-foreground mb-2 text-balance">
+          <h2 className="text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent mb-2 text-balance">
             {step === 1 ? "Choose Your Career Goal" : "Customize Your Path"}
           </h2>
-          <p className="text-muted-foreground text-balance">
+          <p className="text-gray-600 text-balance max-w-md mx-auto">
             {step === 1
               ? "Select the field you want to master and we'll generate your personalized roadmap."
               : "Tell us about your experience and available time."}
           </p>
-        </div>
+        </motion.div>
 
         {step === 1 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
-            {(Object.entries(CAREER_GOALS) as [CareerGoal, typeof CAREER_GOALS[CareerGoal]][]).map(([key, goal]) => {
+          <motion.div
+            layout
+            className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6"
+          >
+            {(Object.entries(CAREER_GOALS) as [CareerGoal, typeof CAREER_GOALS[CareerGoal]][]).map(([key, goal], idx) => {
               const active = selectedGoal === key
+              const gradients: Record<CareerGoal, string> = {
+                "data-science": "from-blue-100 to-cyan-100",
+                "ml-engineering": "from-purple-100 to-pink-100",
+                "web-dev": "from-green-100 to-teal-100",
+                "cloud-devops": "from-orange-100 to-amber-100",
+                "cybersecurity": "from-red-100 to-rose-100",
+              }
               return (
-                <button
+                <motion.button
                   key={key}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.1 }}
                   onClick={() => setSelectedGoal(key)}
-                  className={`relative text-left p-5 rounded-2xl border transition-all duration-200 group ${
-                    active ? "border-primary glow" : "border-border hover:border-primary/50"
+                  whileHover={{ scale: active ? 1 : 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`relative text-left p-6 rounded-2xl border-2 transition-all duration-300 group cursor-pointer ${
+                    active
+                      ? "border-blue-400 shadow-lg shadow-blue-200/50"
+                      : "border-gray-200 hover:border-blue-300 hover:shadow-md"
                   }`}
                   style={{
-                    background: active ? "var(--card)" : "var(--card)",
-                    boxShadow: active ? `0 0 20px ${goal.color}33` : "",
+                    background: active
+                      ? `linear-gradient(135deg, ${goal.color}22, ${goal.color}11)`
+                      : "white",
                   }}
                 >
-                  <div className="flex items-start justify-between mb-3">
-                    <div
-                      className="w-11 h-11 rounded-xl flex items-center justify-center"
-                      style={{
-                        background: active ? goal.color : "var(--muted)",
-                        color: active ? "var(--background)" : "var(--muted-foreground)",
-                        transition: "all 0.2s",
-                      }}
-                    >
-                      {ICONS[goal.icon]}
+                  {/* Gradient background */}
+                  <motion.div
+                    className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${gradients[key]} opacity-0 group-hover:opacity-20 transition-opacity duration-300 pointer-events-none`}
+                  />
+
+                  <div className="relative z-10">
+                    <div className="flex items-start justify-between mb-3">
+                      <motion.div
+                        className="w-12 h-12 rounded-xl flex items-center justify-center text-white"
+                        style={{
+                          background: active ? goal.color : "var(--muted)",
+                          color: active ? "white" : "var(--muted-foreground)",
+                        }}
+                        animate={active ? { rotate: [0, 10, -10, 0] } : {}}
+                        transition={{ duration: 0.6 }}
+                      >
+                        {ICONS[goal.icon]}
+                      </motion.div>
+                      {active && (
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ type: "spring" }}
+                        >
+                          <CheckCircle2 className="w-6 h-6 flex-shrink-0" style={{ color: goal.color }} />
+                        </motion.div>
+                      )}
                     </div>
-                    {active && (
-                      <CheckCircle2 className="w-5 h-5 flex-shrink-0" style={{ color: "var(--primary)" }} />
-                    )}
+                    <h3 className="font-bold text-sm mb-1 text-gray-900">{goal.label}</h3>
+                    <p className="text-gray-600 text-xs leading-relaxed">{goal.description}</p>
                   </div>
-                  <h3 className={`font-semibold text-sm mb-1 ${active ? "text-foreground" : "text-foreground"}`}>
-                    {goal.label}
-                  </h3>
-                  <p className="text-muted-foreground text-xs leading-relaxed">{goal.description}</p>
-                </button>
+                </motion.button>
               )
             })}
-          </div>
+          </motion.div>
         )}
 
         {step === 2 && (
-          <div className="flex flex-col gap-4 mb-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="flex flex-col gap-5 mb-6"
+          >
             {/* Skill Level */}
-            <div className="glass rounded-2xl p-5">
-              <h3 className="text-foreground font-semibold mb-1 text-sm">Your Current Skill Level</h3>
-              <p className="text-muted-foreground text-xs mb-4">This shapes the content and pacing of your roadmap.</p>
+            <div className="glass rounded-2xl p-6 border border-white/40">
+              <h3 className="text-gray-900 font-bold mb-2 text-sm">Your Current Skill Level</h3>
+              <p className="text-gray-600 text-xs mb-4">This shapes the content and pacing of your roadmap.</p>
               <div className="grid grid-cols-2 gap-3">
                 {(["beginner", "intermediate"] as const).map((level) => (
-                  <button
+                  <motion.button
                     key={level}
                     onClick={() => setSkillLevel(level)}
-                    className={`p-4 rounded-xl border text-left transition-all duration-200 ${
-                      skillLevel === level ? "border-primary glow" : "border-border hover:border-primary/40"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className={`p-4 rounded-xl border-2 text-left transition-all duration-300 font-semibold text-sm ${
+                      skillLevel === level
+                        ? "border-blue-400 bg-gradient-to-br from-blue-50 to-cyan-50 text-blue-900 shadow-md"
+                        : "border-gray-200 bg-white text-gray-700 hover:border-blue-300"
                     }`}
-                    style={{ background: skillLevel === level ? "var(--card)" : "var(--muted)" }}
                   >
-                    <div className="flex items-center gap-2 mb-1">
-                      <div
-                        className="w-2 h-2 rounded-full"
-                        style={{ background: skillLevel === level ? "var(--primary)" : "var(--muted-foreground)" }}
-                      />
-                      <span className="font-semibold text-sm text-foreground capitalize">{level}</span>
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      {level === "beginner" ? "Little to no prior experience" : "Some foundation, ready to level up"}
-                    </p>
-                  </button>
+                    {level === "beginner" ? "🌱 Beginner" : "📈 Intermediate"}
+                  </motion.button>
                 ))}
               </div>
             </div>
 
             {/* Study hours */}
-            <div className="glass rounded-2xl p-5">
-              <div className="flex items-center justify-between mb-1">
-                <h3 className="text-foreground font-semibold text-sm">Study Hours Per Week</h3>
-                <div className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold"
-                  style={{ background: "var(--primary)", color: "var(--primary-foreground)" }}>
+            <div className="glass rounded-2xl p-6 border border-white/40">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-gray-900 font-bold text-sm">Study Hours Per Week</h3>
+                <motion.div
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold"
+                  style={{
+                    background: "linear-gradient(135deg, #0066ff, #00b4ff)",
+                    color: "white",
+                  }}
+                  animate={{ scale: [1, 1.05, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >
                   <Clock className="w-3 h-3" />
-                  {hours}h / week
-                </div>
+                  {hours}h/week
+                </motion.div>
               </div>
-              <p className="text-muted-foreground text-xs mb-4">How many hours can you commit each week?</p>
+              <p className="text-gray-600 text-xs mb-4">How many hours can you commit each week?</p>
               <input
                 type="range"
                 min={2}
@@ -135,34 +191,40 @@ export function GoalSelectPage() {
                 step={2}
                 value={hours}
                 onChange={(e) => setHours(Number(e.target.value))}
-                className="w-full accent-primary"
+                className="w-full h-2 rounded-lg appearance-none bg-gradient-to-r from-blue-200 to-cyan-200 cursor-pointer"
+                style={{
+                  background: `linear-gradient(to right, #0066ff 0%, #0066ff ${((hours - 2) / 38) * 100}%, #e5e7eb ${((hours - 2) / 38) * 100}%, #e5e7eb 100%)`,
+                }}
               />
-              <div className="flex justify-between text-xs text-muted-foreground mt-1">
+              <div className="flex justify-between text-xs text-gray-600 mt-2 font-medium">
                 <span>2h (casual)</span>
                 <span>20h (dedicated)</span>
                 <span>40h (intensive)</span>
               </div>
             </div>
-          </div>
+          </motion.div>
         )}
 
-        <button
+        <motion.button
           onClick={handleContinue}
           disabled={!selectedGoal}
-          className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-sm transition-all duration-200 hover:opacity-90 active:scale-[0.98] disabled:opacity-40 glow"
-          style={{ background: "var(--primary)", color: "var(--primary-foreground)" }}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="gradient-btn w-full py-4 rounded-xl font-bold text-sm transition-all duration-200 disabled:opacity-40 flex items-center justify-center gap-2 mt-6"
         >
-          {step === 1 ? "Continue" : "Generate My Roadmap"}
+          {step === 1 ? "Continue to Customize" : "Generate My Roadmap"}
           <ArrowRight className="w-4 h-4" />
-        </button>
+        </motion.button>
 
         {step === 2 && (
-          <button
+          <motion.button
             onClick={() => setStep(1)}
-            className="w-full mt-2 py-3 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="w-full mt-3 py-3 text-sm font-semibold text-gray-700 hover:text-gray-900 hover:bg-gray-100/50 rounded-xl transition-all"
           >
             Back to goal selection
-          </button>
+          </motion.button>
         )}
       </div>
     </div>

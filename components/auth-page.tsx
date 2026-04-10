@@ -39,121 +39,136 @@ export function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Background glow orbs */}
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Animated gradient blobs */}
       <motion.div
-        className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-10 blur-3xl pointer-events-none"
-        style={{ background: "var(--primary)" }}
-        animate={{ scale: [1, 1.1, 1], opacity: [0.08, 0.12, 0.08] }}
-        transition={{ duration: 8, repeat: Infinity }}
+        className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-15 blur-3xl pointer-events-none"
+        style={{ background: "linear-gradient(135deg, #0066ff, #00b4ff)" }}
+        animate={{ scale: [1, 1.2, 1], rotate: [0, 90, 180] }}
+        transition={{ duration: 20, repeat: Infinity }}
       />
       <motion.div
-        className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full opacity-5 blur-3xl pointer-events-none"
-        style={{ background: "oklch(0.65 0.20 280)" }}
-        animate={{ scale: [1, 1.2, 1], opacity: [0.04, 0.08, 0.04] }}
-        transition={{ duration: 10, repeat: Infinity }}
+        className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full opacity-10 blur-3xl pointer-events-none"
+        style={{ background: "linear-gradient(135deg, #a855f7, #ec4899)" }}
+        animate={{ scale: [1.2, 1, 1.2], rotate: [180, 90, 0] }}
+        transition={{ duration: 25, repeat: Infinity }}
       />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.6 }}
         className="w-full max-w-md relative z-10"
       >
-        {/* Back to home link */}
+        {/* Back link */}
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
+          className="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-800 transition-colors mb-6 group"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           Back to home
         </Link>
 
-        {/* Logo */}
+        {/* Logo & Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 mb-4">
+          <motion.div className="inline-flex items-center gap-2 mb-4" whileHover={{ scale: 1.05 }}>
             <motion.div
-              className="w-10 h-10 rounded-xl flex items-center justify-center glow"
-              style={{ background: "var(--primary)" }}
-              animate={{ scale: [1, 1.05, 1] }}
-              transition={{ duration: 3, repeat: Infinity }}
+              className="w-12 h-12 rounded-xl flex items-center justify-center"
+              style={{ background: "linear-gradient(135deg, #0066ff, #00b4ff)" }}
+              animate={{ rotate: [0, 360] }}
+              transition={{ duration: 20, repeat: Infinity }}
             >
-              <Zap className="w-5 h-5" style={{ color: "var(--primary-foreground)" }} />
+              <Zap className="w-6 h-6 text-white" />
             </motion.div>
-            <span className="text-2xl font-bold text-foreground tracking-tight">SkillReactor</span>
-          </div>
-          <p className="text-muted-foreground text-sm">Your personalized learning roadmap generator</p>
+            <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              SkillReactor
+            </span>
+          </motion.div>
+          <p className="text-gray-600 text-sm font-medium">Master skills with personalized roadmaps</p>
         </div>
 
-        {/* Card */}
+        {/* Glassmorphism Card */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="glass rounded-2xl p-8 shadow-2xl"
+          initial={{ opacity: 0, y: 20, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+          className="glass rounded-2xl p-8 border border-white/40"
         >
           {/* Tabs */}
-          <div className="flex rounded-xl p-1 mb-6" style={{ background: "var(--muted)" }}>
+          <div className="flex rounded-lg p-1 mb-6 bg-gray-100">
             {(["login", "register"] as const).map((m) => (
-              <button
+              <motion.button
                 key={m}
                 onClick={() => { setMode(m); setError("") }}
-                className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                whileTap={{ scale: 0.95 }}
+                className={`flex-1 py-2 rounded-md font-semibold text-sm transition-all duration-300 ${
                   mode === m
-                    ? "bg-foreground text-background shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
+                    ? "bg-white text-blue-600 shadow-md"
+                    : "text-gray-600 hover:text-gray-800"
                 }`}
               >
                 {m === "login" ? "Sign In" : "Sign Up"}
-              </button>
+              </motion.button>
             ))}
           </div>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             {mode === "register" && (
-              <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                transition={{ duration: 0.3 }}
+                className="relative overflow-hidden"
+              >
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-500" />
                 <input
                   type="text"
                   placeholder="Full Name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 rounded-xl bg-input border border-border text-foreground placeholder-muted-foreground text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
+                  className="w-full pl-10 pr-4 py-3 rounded-xl bg-white border-2 border-gray-200 text-gray-900 placeholder-gray-500 text-sm input-glow focus:outline-none"
                 />
-              </div>
+              </motion.div>
             )}
 
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-500" />
               <input
                 type="email"
                 placeholder="Email Address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 rounded-xl bg-input border border-border text-foreground placeholder-muted-foreground text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
+                className="w-full pl-10 pr-4 py-3 rounded-xl bg-white border-2 border-gray-200 text-gray-900 placeholder-gray-500 text-sm input-glow focus:outline-none"
               />
             </div>
 
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-500" />
               <input
                 type={showPass ? "text" : "password"}
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-10 pr-10 py-3 rounded-xl bg-input border border-border text-foreground placeholder-muted-foreground text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
+                className="w-full pl-10 pr-10 py-3 rounded-xl bg-white border-2 border-gray-200 text-gray-900 placeholder-gray-500 text-sm input-glow focus:outline-none"
               />
-              <button
+              <motion.button
                 type="button"
                 onClick={() => setShowPass(!showPass)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                whileHover={{ scale: 1.1 }}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-blue-600 transition-colors"
               >
                 {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-              </button>
+              </motion.button>
             </div>
 
             {error && (
-              <p className="text-sm text-destructive-foreground px-1">{error}</p>
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-sm text-red-600 px-1 font-medium"
+              >
+                {error}
+              </motion.p>
             )}
 
             <motion.button
@@ -161,8 +176,7 @@ export function AuthPage() {
               disabled={loading}
               whileHover={{ scale: loading ? 1 : 1.02 }}
               whileTap={{ scale: loading ? 1 : 0.98 }}
-              className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-sm transition-all duration-200 disabled:opacity-60 glow"
-              style={{ background: "var(--primary)", color: "var(--primary-foreground)" }}
+              className="gradient-btn w-full py-3 rounded-xl font-semibold text-sm transition-all duration-200 disabled:opacity-60 flex items-center justify-center gap-2"
             >
               {loading ? (
                 <span className="flex items-center gap-2">
@@ -181,18 +195,18 @@ export function AuthPage() {
             </motion.button>
           </form>
 
-          <p className="text-center text-xs text-muted-foreground mt-4">
+          <p className="text-center text-xs text-gray-600 mt-4">
             {mode === "login" ? "No account? " : "Already have one? "}
             <button
               onClick={() => { setMode(mode === "login" ? "register" : "login"); setError("") }}
-              className="underline hover:text-foreground transition-colors"
+              className="font-semibold text-blue-600 hover:text-blue-700 transition-colors underline"
             >
               {mode === "login" ? "Sign up free" : "Sign in"}
             </button>
           </p>
         </motion.div>
 
-        <p className="text-center text-xs text-muted-foreground mt-6">
+        <p className="text-center text-xs text-gray-600 mt-6">
           Demo app — data stored locally in your browser
         </p>
       </motion.div>

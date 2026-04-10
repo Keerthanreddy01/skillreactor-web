@@ -4,48 +4,65 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Premium Futuristic Dark Theme */
-  --background: oklch(0.08 0 0);
-  --foreground: oklch(0.92 0 0);
-  --card: oklch(0.12 0 0);
-  --card-foreground: oklch(0.92 0 0);
-  --popover: oklch(0.12 0 0);
-  --popover-foreground: oklch(0.92 0 0);
-  /* Cyan/Blue Primary */
-  --primary: oklch(0.68 0.22 195);
-  --primary-foreground: oklch(0.08 0 0);
-  /* Purple Accent */
-  --accent: oklch(0.65 0.20 280);
-  --accent-foreground: oklch(0.08 0 0);
-  --secondary: oklch(0.18 0 0);
-  --secondary-foreground: oklch(0.85 0 0);
-  --muted: oklch(0.16 0 0);
-  --muted-foreground: oklch(0.50 0 0);
-  --destructive: oklch(0.58 0.25 25);
-  --destructive-foreground: oklch(0.92 0 0);
-  --border: oklch(0.18 0 0);
-  --input: oklch(0.14 0 0);
-  --ring: oklch(0.68 0.22 195);
-  --chart-1: oklch(0.68 0.22 195);
-  --chart-2: oklch(0.65 0.20 280);
-  --chart-3: oklch(0.70 0.18 160);
-  --chart-4: oklch(0.75 0.16 60);
-  --chart-5: oklch(0.65 0.20 30);
+  /* Light + Vibrant Gen-Z Theme */
+  /* Base Colors - Light */
+  --background: #f8f9ff;
+  --foreground: #1a1a2e;
+  --card: #ffffff;
+  --card-foreground: #1a1a2e;
+  --popover: #ffffff;
+  --popover-foreground: #1a1a2e;
+  
+  /* Primary - Cyan/Blue Gradient */
+  --primary: #0066ff;
+  --primary-light: #00b4ff;
+  --primary-foreground: #ffffff;
+  
+  /* Accent - Purple/Pink Gradient */
+  --accent: #a855f7;
+  --accent-light: #ec4899;
+  --accent-foreground: #ffffff;
+  
+  /* Neutral */
+  --secondary: #f0f0f8;
+  --secondary-foreground: #1a1a2e;
+  --muted: #e5e7eb;
+  --muted-foreground: #6b7280;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  
+  /* Borders & Input */
+  --border: #e5e7eb;
+  --input: #ffffff;
+  --ring: #0066ff;
+  
+  /* Chart Colors */
+  --chart-1: #0066ff;
+  --chart-2: #a855f7;
+  --chart-3: #00b4ff;
+  --chart-4: #ec4899;
+  --chart-5: #f59e0b;
+  
+  /* Border Radius */
   --radius: 0.75rem;
-  --sidebar: oklch(0.11 0 0);
-  --sidebar-foreground: oklch(0.85 0 0);
-  --sidebar-primary: oklch(0.68 0.22 195);
-  --sidebar-primary-foreground: oklch(0.08 0 0);
-  --sidebar-accent: oklch(0.16 0 0);
-  --sidebar-accent-foreground: oklch(0.92 0 0);
-  --sidebar-border: oklch(0.18 0 0);
-  --sidebar-ring: oklch(0.68 0.22 195);
-  /* Glass effect with premium backdrop blur */
-  --glass-bg: oklch(0.14 0 0 / 0.55);
-  --glass-border: oklch(0.25 0 0 / 0.3);
-  /* Glow colors with cyan and purple gradients */
-  --glow-cyan: oklch(0.68 0.22 195 / 0.35);
-  --glow-purple: oklch(0.65 0.20 280 / 0.3);
+  
+  /* Sidebar */
+  --sidebar: #ffffff;
+  --sidebar-foreground: #1a1a2e;
+  --sidebar-primary: #0066ff;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f0f0f8;
+  --sidebar-accent-foreground: #0066ff;
+  --sidebar-border: #e5e7eb;
+  --sidebar-ring: #0066ff;
+  
+  /* Glass effect - Light */
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(0, 102, 255, 0.1);
+  
+  /* Glow colors - Vibrant */
+  --glow-cyan: rgba(0, 180, 255, 0.4);
+  --glow-purple: rgba(168, 85, 247, 0.35);
   --glow-color: var(--glow-cyan);
 }
 
@@ -100,17 +117,22 @@
     background-image: 
       radial-gradient(
         circle at 20% 50%,
-        oklch(0.68 0.22 195 / 0.05) 0%,
+        rgba(0, 102, 255, 0.08) 0%,
         transparent 50%
       ),
       radial-gradient(
         circle at 80% 80%,
-        oklch(0.65 0.20 280 / 0.05) 0%,
+        rgba(168, 85, 247, 0.06) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 50% 20%,
+        rgba(236, 72, 153, 0.04) 0%,
         transparent 50%
       );
   }
   html {
-    color-scheme: dark;
+    color-scheme: light;
   }
 }
 
@@ -118,8 +140,9 @@
   .glass {
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
   }
   
   .glow {
@@ -130,68 +153,42 @@
     text-shadow: 0 0 20px var(--glow-color);
   }
   
-  .glow-pulse {
-    animation: glow-pulse 3s ease-in-out infinite;
+  .gradient-btn {
+    background: linear-gradient(135deg, #0066ff, #00b4ff);
+    color: white;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 20px rgba(0, 102, 255, 0.25);
   }
   
-  @keyframes glow-pulse {
-    0%, 100% {
-      box-shadow: 0 0 15px var(--glow-color);
-    }
-    50% {
-      box-shadow: 0 0 30px var(--glow-color);
-    }
+  .gradient-btn:hover {
+    box-shadow: 0 8px 30px rgba(0, 102, 255, 0.4);
+    transform: translateY(-2px);
   }
   
-  .border-glow {
-    border-color: var(--primary);
-    box-shadow: inset 0 0 20px var(--glow-cyan), 0 0 20px var(--glow-cyan);
+  .gradient-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(248,249,255,0.8));
+    border: 1px solid rgba(0, 102, 255, 0.1);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+    transition: all 0.3s ease;
   }
   
-  .ripple {
-    position: relative;
-    overflow: hidden;
+  .gradient-card:hover {
+    box-shadow: 0 12px 36px rgba(0, 102, 255, 0.12);
+    transform: translateY(-4px);
+    border-color: rgba(0, 102, 255, 0.2);
   }
   
-  .ripple::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    background: currentColor;
-    opacity: 0.3;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-  }
-  
-  .ripple:active::after {
-    animation: ripple-effect 0.6s ease-out;
-  }
-  
-  @keyframes ripple-effect {
-    to {
-      width: 300px;
-      height: 300px;
-      opacity: 0;
-    }
-  }
-  
-  /* Premium input focus glow */
   .input-glow {
     @apply transition-all duration-300;
+    border: 1.5px solid var(--border);
   }
   
   .input-glow:focus {
-    box-shadow: 
-      0 0 0 2px var(--background),
-      0 0 0 4px var(--primary),
-      0 0 20px var(--glow-color);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1), 0 0 12px rgba(0, 102, 255, 0.25);
   }
   
-  /* Smooth page transitions */
   .page-fade-in {
     animation: fade-in-up 0.5s ease-out;
   }
