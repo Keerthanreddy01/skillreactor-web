@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from "framer-motion"
 const PAGE_TITLES: Record<string, string> = {
   dashboard: "Dashboard",
   roadmap: "My Roadmap",
+  journey: "Learning Journey",
   planner: "Weekly Planner",
   progress: "Progress Tracker",
   mentor: "Chat Mentor",

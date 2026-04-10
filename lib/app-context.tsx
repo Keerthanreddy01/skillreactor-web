@@ -24,7 +24,7 @@ export interface AppState {
   currentPage: Page
 }
 
-export type Page = "auth" | "goal-select" | "dashboard" | "roadmap" | "planner" | "progress" | "mentor"
+export type Page = "auth" | "goal-select" | "dashboard" | "roadmap" | "journey" | "planner" | "progress" | "mentor"
 
 interface AppContextValue extends AppState {
   login: (name: string, email: string, password: string) => void
