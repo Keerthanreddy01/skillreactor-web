@@ -16,12 +16,21 @@ export interface UserProfile {
   hoursPerWeek: number
 }
 
+export interface StreakData {
+  currentStreak: number
+  lastActivityDate: string | null
+  longestStreak: number
+}
+
 export interface AppState {
   user: User | null
   profile: UserProfile
   completedSteps: Record<string, boolean>
+  completedDates: Record<string, string> // stepId -> ISO date
   roadmapSteps: RoadmapStep[]
   currentPage: Page
+  streak: StreakData
+  currentTopicIndex: number
 }
 
 export type Page = "auth" | "goal-select" | "dashboard" | "roadmap" | "journey" | "planner" | "progress" | "mentor"
@@ -33,15 +42,21 @@ interface AppContextValue extends AppState {
   setCurrentPage: (page: Page) => void
   saveProfile: (goal: CareerGoal | CustomGoal, skillLevel: SkillLevel, hoursPerWeek: number) => void
   toggleStepComplete: (stepId: string) => void
+  markStepDone: (stepId: string) => void
   getProgressPercent: () => number
+  getCurrentTopic: () => RoadmapStep | null
+  updateStreakIfNeeded: () => void
 }
 
 const defaultState: AppState = {
   user: null,
   profile: { goal: null, skillLevel: null, hoursPerWeek: 10 },
   completedSteps: {},
+  completedDates: {},
   roadmapSteps: [],
   currentPage: "auth",
+  streak: { currentStreak: 0, lastActivityDate: null, longestStreak: 0 },
+  currentTopicIndex: 0,
 }
 
 const AppContext = createContext<AppContextValue | null>(null)
@@ -137,6 +152,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         profile: { goal: goalId, skillLevel, hoursPerWeek },
         roadmapSteps: steps,
         completedSteps: {},
+        completedDates: {},
+        currentTopicIndex: 0,
+        streak: { currentStreak: 0, lastActivityDate: null, longestStreak: 0 },
         currentPage: "dashboard",
       })
     },
@@ -157,6 +175,75 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     return Math.round((done / state.roadmapSteps.length) * 100)
   }, [state])
 
+  const getCurrentTopic = useCallback(() => {
+    if (!state.roadmapSteps.length) return null
+    // Find first incomplete topic
+    const current = state.roadmapSteps.find((s) => !state.completedSteps[s.id])
+    return current || state.roadmapSteps[state.roadmapSteps.length - 1]
+  }, [state])
+
+  const updateStreakIfNeeded = useCallback(() => {
+    const today = new Date().toISOString().split("T")[0]
+    const lastDate = state.streak.lastActivityDate
+    
+    if (!lastDate) {
+      // First activity
+      persist({
+        ...state,
+        streak: { currentStreak: 1, lastActivityDate: today, longestStreak: 1 },
+      })
+      return
+    }
+
+    const lastDateObj = new Date(lastDate)
+    const todayObj = new Date(today)
+    const diffDays = Math.floor((todayObj.getTime() - lastDateObj.getTime()) / (1000 * 60 * 60 * 24))
+
+    if (diffDays === 0) {
+      // Already counted today
+      return
+    } else if (diffDays === 1) {
+      // Consecutive day
+      const newStreak = state.streak.currentStreak + 1
+      const newLongest = Math.max(newStreak, state.streak.longestStreak)
+      persist({
+        ...state,
+        streak: { currentStreak: newStreak, lastActivityDate: today, longestStreak: newLongest },
+      })
+    } else {
+      // Gap in streak, reset
+      persist({
+        ...state,
+        streak: { currentStreak: 1, lastActivityDate: today, longestStreak: state.streak.longestStreak },
+      })
+    }
+  }, [state, persist])
+
+  const markStepDone = useCallback(
+    (stepId: string) => {
+      const today = new Date().toISOString().split("T")[0]
+      const completed = { ...state.completedSteps, [stepId]: true }
+      const dates = { ...state.completedDates, [stepId]: today }
+      
+      // Find next incomplete topic
+      let nextIndex = state.currentTopicIndex
+      const nextIncomplete = state.roadmapSteps.findIndex((s, i) => i > state.currentTopicIndex && !completed[s.id])
+      if (nextIncomplete !== -1) {
+        nextIndex = nextIncomplete
+      }
+
+      updateStreakIfNeeded()
+
+      persist({
+        ...state,
+        completedSteps: completed,
+        completedDates: dates,
+        currentTopicIndex: nextIndex,
+      })
+    },
+    [state, persist, updateStreakIfNeeded]
+  )
+
   if (!hydrated) return null
 
   return (
@@ -169,7 +256,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         setCurrentPage,
         saveProfile,
         toggleStepComplete,
+        markStepDone,
         getProgressPercent,
+        getCurrentTopic,
+        updateStreakIfNeeded,
       }}
     >
       {children}
