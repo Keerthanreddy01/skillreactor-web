@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react"
 import type { CareerGoal, SkillLevel, RoadmapStep } from "./roadmap-data"
 import { getRoadmap } from "./roadmap-data"
+import { generateCustomRoadmap, type CustomGoal } from "./custom-goals"
 
 export interface User {
   name: string
@@ -10,7 +11,7 @@ export interface User {
 }
 
 export interface UserProfile {
-  goal: CareerGoal | null
+  goal: CareerGoal | string | null
   skillLevel: SkillLevel | null
   hoursPerWeek: number
 }
@@ -30,7 +31,7 @@ interface AppContextValue extends AppState {
   register: (name: string, email: string, password: string) => void
   logout: () => void
   setCurrentPage: (page: Page) => void
-  saveProfile: (goal: CareerGoal, skillLevel: SkillLevel, hoursPerWeek: number) => void
+  saveProfile: (goal: CareerGoal | CustomGoal, skillLevel: SkillLevel, hoursPerWeek: number) => void
   toggleStepComplete: (stepId: string) => void
   getProgressPercent: () => number
 }
@@ -116,11 +117,24 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   )
 
   const saveProfile = useCallback(
-    (goal: CareerGoal, skillLevel: SkillLevel, hoursPerWeek: number) => {
-      const steps = getRoadmap(goal, skillLevel)
+    (goal: CareerGoal | CustomGoal, skillLevel: SkillLevel, hoursPerWeek: number) => {
+      let steps: RoadmapStep[] = []
+      let goalId: string = ""
+
+      // Check if it's a custom goal or predefined
+      if ("topics" in goal) {
+        // Custom goal
+        steps = generateCustomRoadmap(goal, skillLevel)
+        goalId = goal.id
+      } else {
+        // Predefined career goal
+        steps = getRoadmap(goal, skillLevel)
+        goalId = goal
+      }
+
       persist({
         ...state,
-        profile: { goal, skillLevel, hoursPerWeek },
+        profile: { goal: goalId, skillLevel, hoursPerWeek },
         roadmapSteps: steps,
         completedSteps: {},
         currentPage: "dashboard",

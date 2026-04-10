@@ -1,10 +1,12 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useApp } from "@/lib/app-context"
 import { CAREER_GOALS, type CareerGoal, type SkillLevel } from "@/lib/roadmap-data"
-import { BarChart2, Brain, Code2, Cloud, Shield, CheckCircle2, ArrowRight, Clock } from "lucide-react"
+import { getCustomGoals, type CustomGoal, deleteCustomGoal } from "@/lib/custom-goals"
+import { BarChart2, Brain, Code2, Cloud, Shield, CheckCircle2, ArrowRight, Clock, Plus, Edit2, Trash2 } from "lucide-react"
 import { motion } from "framer-motion"
+import { CreateCustomGoalModal } from "./create-custom-goal-modal"
 
 const ICONS: Record<string, React.ReactNode> = {
   BarChart2: <BarChart2 className="w-6 h-6" />,
@@ -16,15 +18,45 @@ const ICONS: Record<string, React.ReactNode> = {
 
 export function GoalSelectPage() {
   const { saveProfile } = useApp()
-  const [selectedGoal, setSelectedGoal] = useState<CareerGoal | null>(null)
+  const [selectedGoal, setSelectedGoal] = useState<CareerGoal | string | null>(null)
   const [skillLevel, setSkillLevel] = useState<SkillLevel>("beginner")
   const [hours, setHours] = useState(10)
   const [step, setStep] = useState<1 | 2>(1)
+  const [customGoals, setCustomGoals] = useState<CustomGoal[]>([])
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [editingGoal, setEditingGoal] = useState<CustomGoal | null>(null)
+
+  useEffect(() => {
+    setCustomGoals(getCustomGoals())
+  }, [])
 
   const handleContinue = () => {
     if (!selectedGoal) return
-    if (step === 1) { setStep(2); return }
-    saveProfile(selectedGoal, skillLevel, hours)
+    if (step === 1) {
+      setStep(2)
+      return
+    }
+    // Check if it's a custom goal or predefined
+    if (typeof selectedGoal === "string" && selectedGoal.startsWith("custom_")) {
+      const customGoal = customGoals.find((g) => g.id === selectedGoal)
+      if (customGoal) {
+        saveProfile(customGoal, skillLevel, hours)
+      }
+    } else {
+      saveProfile(selectedGoal as CareerGoal, skillLevel, hours)
+    }
+  }
+
+  const handleGoalCreated = (goal: CustomGoal) => {
+    setCustomGoals([...customGoals, goal])
+    setSelectedGoal(goal.id)
+    setEditingGoal(null)
+  }
+
+  const handleDeleteCustomGoal = (goalId: string) => {
+    deleteCustomGoal(goalId)
+    setCustomGoals(customGoals.filter((g) => g.id !== goalId))
+    if (selectedGoal === goalId) setSelectedGoal(null)
   }
 
   return (
@@ -66,74 +98,195 @@ export function GoalSelectPage() {
         </motion.div>
 
         {step === 1 && (
-          <motion.div
-            layout
-            className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6"
-          >
-            {(Object.entries(CAREER_GOALS) as [CareerGoal, typeof CAREER_GOALS[CareerGoal]][]).map(([key, goal], idx) => {
-              const active = selectedGoal === key
-              const gradients: Record<CareerGoal, string> = {
-                "data-science":     "from-blue-100 to-cyan-100",
-                "machine-learning": "from-purple-100 to-pink-100",
-                "web-development":  "from-green-100 to-teal-100",
-                "cloud-computing":  "from-orange-100 to-amber-100",
-                "cybersecurity":    "from-red-100 to-rose-100",
-              }
-              return (
-                <motion.button
-                  key={key}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.1 }}
-                  onClick={() => setSelectedGoal(key)}
-                  whileHover={{ scale: active ? 1 : 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className={`relative text-left p-6 rounded-2xl border-2 transition-all duration-300 group cursor-pointer ${
-                    active
-                      ? "border-blue-400 shadow-lg shadow-blue-200/50"
-                      : "border-gray-200 hover:border-blue-300 hover:shadow-md"
-                  }`}
-                  style={{
-                    background: active
-                      ? `linear-gradient(135deg, ${goal.color}22, ${goal.color}11)`
-                      : "white",
-                  }}
-                >
-                  {/* Gradient background */}
-                  <motion.div
-                    className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${gradients[key]} opacity-0 group-hover:opacity-20 transition-opacity duration-300 pointer-events-none`}
-                  />
+          <>
+            <motion.div
+              layout
+              className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6"
+            >
+              {(Object.entries(CAREER_GOALS) as [CareerGoal, typeof CAREER_GOALS[CareerGoal]][]).map(([key, goal], idx) => {
+                const active = selectedGoal === key
+                const gradients: Record<CareerGoal, string> = {
+                  "data-science":     "from-blue-100 to-cyan-100",
+                  "machine-learning": "from-purple-100 to-pink-100",
+                  "web-development":  "from-green-100 to-teal-100",
+                  "cloud-computing":  "from-orange-100 to-amber-100",
+                  "cybersecurity":    "from-red-100 to-rose-100",
+                }
+                return (
+                  <motion.button
+                    key={key}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.1 }}
+                    onClick={() => setSelectedGoal(key)}
+                    whileHover={{ scale: active ? 1 : 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className={`relative text-left p-6 rounded-2xl border-2 transition-all duration-300 group cursor-pointer ${
+                      active
+                        ? "border-blue-400 shadow-lg shadow-blue-200/50"
+                        : "border-gray-200 hover:border-blue-300 hover:shadow-md"
+                    }`}
+                    style={{
+                      background: active
+                        ? `linear-gradient(135deg, ${goal.color}22, ${goal.color}11)`
+                        : "white",
+                    }}
+                  >
+                    {/* Gradient background */}
+                    <motion.div
+                      className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${gradients[key]} opacity-0 group-hover:opacity-20 transition-opacity duration-300 pointer-events-none`}
+                    />
 
-                  <div className="relative z-10">
-                    <div className="flex items-start justify-between mb-3">
-                      <motion.div
-                        className="w-12 h-12 rounded-xl flex items-center justify-center text-white"
-                        style={{
-                          background: active ? goal.color : "var(--muted)",
-                          color: active ? "white" : "var(--muted-foreground)",
-                        }}
-                        animate={active ? { rotate: [0, 10, -10, 0] } : {}}
-                        transition={{ duration: 0.6 }}
-                      >
-                        {ICONS[goal.icon]}
-                      </motion.div>
-                      {active && (
+                    <div className="relative z-10">
+                      <div className="flex items-start justify-between mb-3">
                         <motion.div
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          transition={{ type: "spring" }}
+                          className="w-12 h-12 rounded-xl flex items-center justify-center text-white"
+                          style={{
+                            background: active ? goal.color : "var(--muted)",
+                            color: active ? "white" : "var(--muted-foreground)",
+                          }}
+                          animate={active ? { rotate: [0, 10, -10, 0] } : {}}
+                          transition={{ duration: 0.6 }}
                         >
-                          <CheckCircle2 className="w-6 h-6 flex-shrink-0" style={{ color: goal.color }} />
+                          {ICONS[goal.icon]}
                         </motion.div>
-                      )}
+                        {active && (
+                          <motion.div
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ type: "spring" }}
+                          >
+                            <CheckCircle2 className="w-6 h-6 flex-shrink-0" style={{ color: goal.color }} />
+                          </motion.div>
+                        )}
+                      </div>
+                      <h3 className="font-bold text-sm mb-1 text-gray-900">{goal.label}</h3>
+                      <p className="text-gray-600 text-xs leading-relaxed">{goal.description}</p>
                     </div>
-                    <h3 className="font-bold text-sm mb-1 text-gray-900">{goal.label}</h3>
-                    <p className="text-gray-600 text-xs leading-relaxed">{goal.description}</p>
-                  </div>
-                </motion.button>
-              )
-            })}
-          </motion.div>
+                  </motion.button>
+                )
+              })}
+
+              {/* Custom Goals */}
+              {customGoals.map((goal, idx) => {
+                const active = selectedGoal === goal.id
+                return (
+                  <motion.div
+                    key={goal.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: (Object.keys(CAREER_GOALS).length + idx) * 0.1 }}
+                    className={`relative text-left p-6 rounded-2xl border-2 transition-all duration-300 group cursor-pointer ${
+                      active
+                        ? "border-blue-400 shadow-lg shadow-blue-200/50"
+                        : "border-gray-200 hover:border-blue-300 hover:shadow-md"
+                    }`}
+                    style={{
+                      background: active
+                        ? `${goal.color}22`
+                        : "white",
+                    }}
+                  >
+                    {/* Custom tag */}
+                    <div className="absolute top-3 right-3">
+                      <span className="px-2 py-1 rounded-full text-xs font-bold text-white" style={{ background: goal.color }}>
+                        Custom
+                      </span>
+                    </div>
+
+                    {/* Content */}
+                    <motion.button
+                      onClick={() => setSelectedGoal(goal.id)}
+                      className="w-full text-left"
+                    >
+                      <div className="flex items-start justify-between mb-3 pr-12">
+                        <div
+                          className="w-12 h-12 rounded-xl flex items-center justify-center text-white flex-shrink-0"
+                          style={{ background: goal.color }}
+                        >
+                          <CheckCircle2 className="w-6 h-6" />
+                        </div>
+                        {active && (
+                          <motion.div
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ type: "spring" }}
+                          >
+                            <div className="w-6 h-6 rounded-full border-2 border-blue-400 bg-blue-50" />
+                          </motion.div>
+                        )}
+                      </div>
+                      <h3 className="font-bold text-sm mb-1 text-gray-900">{goal.name}</h3>
+                      <p className="text-gray-600 text-xs leading-relaxed mb-2">{goal.description}</p>
+                      <p className="text-gray-500 text-xs">{goal.topics.length} topics</p>
+                    </motion.button>
+
+                    {/* Edit/Delete buttons */}
+                    <div className="flex gap-1 mt-3 pt-3 border-t border-gray-200 absolute bottom-3 right-3">
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setEditingGoal(goal)
+                          setIsModalOpen(true)
+                        }}
+                        className="p-1.5 hover:bg-blue-100 rounded-lg transition-colors"
+                      >
+                        <Edit2 className="w-3.5 h-3.5 text-blue-600" />
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleDeleteCustomGoal(goal.id)
+                        }}
+                        className="p-1.5 hover:bg-red-100 rounded-lg transition-colors"
+                      >
+                        <Trash2 className="w-3.5 h-3.5 text-red-600" />
+                      </motion.button>
+                    </div>
+                  </motion.div>
+                )
+              })}
+
+              {/* Create Custom Goal Card */}
+              <motion.button
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: (Object.keys(CAREER_GOALS).length + customGoals.length) * 0.1 }}
+                onClick={() => {
+                  setEditingGoal(null)
+                  setIsModalOpen(true)
+                }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="relative text-left p-6 rounded-2xl border-2 border-dashed border-blue-300 hover:border-blue-400 transition-all duration-300 cursor-pointer group bg-gradient-to-br from-blue-50/50 to-cyan-50/50 hover:shadow-md"
+              >
+                <div className="flex flex-col items-center justify-center h-full min-h-[200px]">
+                  <motion.div
+                    className="w-12 h-12 rounded-xl flex items-center justify-center bg-gradient-to-r from-blue-400 to-cyan-400 text-white mb-3"
+                    animate={{ y: [0, -4, 0] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    <Plus className="w-6 h-6" />
+                  </motion.div>
+                  <h3 className="font-bold text-sm text-center text-gray-900">Create Custom Goal</h3>
+                  <p className="text-gray-600 text-xs text-center mt-1">Build your own learning path</p>
+                </div>
+              </motion.button>
+            </motion.div>
+
+            {/* Modal */}
+            <CreateCustomGoalModal
+              isOpen={isModalOpen}
+              onClose={() => {
+                setIsModalOpen(false)
+                setEditingGoal(null)
+              }}
+              onGoalCreated={handleGoalCreated}
+              editingGoal={editingGoal || undefined}
+            />
+          </>
         )}
 
         {step === 2 && (
