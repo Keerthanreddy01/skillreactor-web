@@ -121,15 +121,15 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       let steps: RoadmapStep[] = []
       let goalId: string = ""
 
-      // Check if it's a custom goal or predefined
-      if ("topics" in goal) {
+      // Check if it's a custom goal (object with topics) or predefined (string)
+      if (typeof goal === "object" && goal !== null && "topics" in goal) {
         // Custom goal
         steps = generateCustomRoadmap(goal, skillLevel)
         goalId = goal.id
       } else {
-        // Predefined career goal
-        steps = getRoadmap(goal, skillLevel)
-        goalId = goal
+        // Predefined career goal (string)
+        steps = getRoadmap(goal as CareerGoal, skillLevel)
+        goalId = goal as string
       }
 
       persist({
