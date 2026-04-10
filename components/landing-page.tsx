@@ -198,7 +198,7 @@ function HeroSection() {
       >
         <div className="relative h-[280px] sm:h-[320px] md:h-[360px]">
 
-          {/* Left card — Transactions */}
+          {/* Left card — Topics Completed */}
           <motion.div
             initial={{ opacity: 0, y: 40, rotate: -10 }}
             animate={{ opacity: 1, y: 0, rotate: -6 }}
@@ -211,8 +211,8 @@ function HeroSection() {
               transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
               className="bg-white rounded-3xl p-5 shadow-2xl shadow-black/15 border border-gray-100/50 backdrop-filter backdrop-blur-sm"
             >
-              <p className="text-gray-400 text-xs mb-1 font-medium tracking-wide">OVERVIEW</p>
-              <h3 className="text-gray-800 font-semibold text-base mb-3">Transactions</h3>
+              <p className="text-gray-400 text-xs mb-1 font-medium tracking-wide">PROGRESS</p>
+              <h3 className="text-gray-800 font-semibold text-base mb-3">Topics Completed</h3>
               <div className="flex items-baseline gap-2 mb-4">
                 <span className="text-4xl font-bold text-gray-800">85%</span>
                 <span className="text-emerald-500 text-xs font-semibold flex items-center gap-0.5">
@@ -220,13 +220,12 @@ function HeroSection() {
                   12%
                 </span>
               </div>
-              {/* Bar chart */}
+              {/* Weekly progress bars */}
               <div className="flex gap-0.5 h-10 items-end">
                 {[30, 50, 35, 65, 45, 70, 55, 80, 40, 65, 75, 50].map((h, i) => (
                   <motion.div
                     key={i}
                     className="flex-1 rounded-sm"
-                    style={{ background: "linear-gradient(to top, #3b82f6, #60a5fa)" }}
                     initial={{ scaleY: 0 }}
                     animate={{ scaleY: 1 }}
                     transition={{ duration: 0.6, delay: 1.1 + i * 0.04, ease: "easeOut" }}
@@ -237,7 +236,7 @@ function HeroSection() {
             </motion.div>
           </motion.div>
 
-          {/* Center card — Card user */}
+          {/* Center card — Your Progress */}
           <motion.div
             initial={{ opacity: 0, y: 60, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -252,9 +251,9 @@ function HeroSection() {
               className="bg-white rounded-3xl p-6 shadow-2xl shadow-black/15 border border-gray-100/50 backdrop-filter backdrop-blur-sm"
             >
               <div className="flex items-center justify-between mb-5">
-                <h3 className="text-gray-800 font-semibold text-base">Card user</h3>
+                <h3 className="text-gray-800 font-semibold text-base">Your Progress</h3>
                 <button className="flex items-center gap-1 text-xs text-gray-500 bg-gray-100 px-3 py-1.5 rounded-full">
-                  Monthly
+                  This Week
                   <ChevronDown className="w-3.5 h-3.5" />
                 </button>
               </div>
@@ -290,7 +289,7 @@ function HeroSection() {
             </motion.div>
           </motion.div>
 
-          {/* Right card — Monthly stats */}
+          {/* Right card — Weekly stats */}
           <motion.div
             initial={{ opacity: 0, y: 40, rotate: 10 }}
             animate={{ opacity: 1, y: 0, rotate: 4 }}
@@ -304,14 +303,14 @@ function HeroSection() {
               className="bg-white rounded-3xl p-4 shadow-2xl shadow-black/15 border border-gray-100/50 backdrop-filter backdrop-blur-sm"
             >
               <div className="flex items-center justify-between mb-3">
-                <span className="text-gray-500 text-xs font-medium">Monthly</span>
+                <span className="text-gray-500 text-xs font-medium">This Week</span>
                 <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
               </div>
               <div className="flex flex-col gap-2.5">
                 {[
-                  { dot: "#3b82f6", label: "Revenue", val: "$12.4k" },
-                  { dot: "#10b981", label: "Growth",  val: "+24%"  },
-                  { dot: "#f59e0b", label: "Users",   val: "1.2k"  },
+                  { dot: "#3b82f6", label: "Hours",    val: "12.4h" },
+                  { dot: "#10b981", label: "Progress", val: "+24%"  },
+                  { dot: "#f59e0b", label: "Topics",   val: "8"     },
                 ].map((row) => (
                   <div key={row.label} className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: row.dot }} />
