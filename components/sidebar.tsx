@@ -50,11 +50,13 @@ export function Sidebar({ mobile, onClose }: SidebarProps) {
         <div className="flex items-center gap-2.5">
           <div
             className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-            style={{ background: "var(--primary)" }}
+            style={{ background: "linear-gradient(135deg, #0066ff, #00b4ff)" }}
           >
-            <Zap className="w-4 h-4" style={{ color: "var(--primary-foreground)" }} />
+            <Zap className="w-4 h-4 text-white" />
           </div>
-          <span className="font-bold text-foreground text-base tracking-tight">SkillReactor</span>
+          <span className="font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent text-base tracking-tight">
+            SkillReactor
+          </span>
         </div>
         {mobile && (
           <button onClick={onClose} className="text-muted-foreground hover:text-foreground transition-colors p-1">
@@ -67,8 +69,8 @@ export function Sidebar({ mobile, onClose }: SidebarProps) {
       <div className="mx-3 mb-4 p-3 rounded-xl" style={{ background: "var(--sidebar-accent)" }}>
         <div className="flex items-center gap-2.5">
           <div
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-semibold flex-shrink-0"
-            style={{ background: "var(--primary)", color: "var(--primary-foreground)" }}
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold flex-shrink-0 text-white"
+            style={{ background: "linear-gradient(135deg, #0066ff, #00b4ff)" }}
           >
             {user?.name?.[0]?.toUpperCase() ?? "U"}
           </div>
@@ -94,20 +96,13 @@ export function Sidebar({ mobile, onClose }: SidebarProps) {
                   ? "text-primary-foreground"
                   : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground"
               }`}
-              style={active ? { background: "var(--primary)" } : {}}
+              style={active ? { background: "linear-gradient(135deg, #0066ff, #00b4ff)" } : {}}
             >
-              {/* Animated active indicator */}
+              {/* Active indicator glow */}
               {active && (
-                <motion.div
-                  className="absolute inset-0 rounded-xl pointer-events-none"
-                  style={{ background: "var(--primary)" }}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: [0.3, 0.1, 0.3] }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
+                <div
+                  className="absolute inset-0 rounded-xl pointer-events-none opacity-20"
+                  style={{ background: "linear-gradient(135deg, #0066ff, #00b4ff)" }}
                 />
               )}
               <span className={`relative z-10 ${active ? "text-primary-foreground" : "text-muted-foreground group-hover:text-foreground transition-colors"}`}>
@@ -145,12 +140,12 @@ export function Sidebar({ mobile, onClose }: SidebarProps) {
         <div className="mx-3 mb-3 p-3 rounded-xl" style={{ background: "var(--sidebar-accent)" }}>
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs text-muted-foreground font-medium">{goalInfo.label}</span>
-            <span className="text-xs font-semibold" style={{ color: "var(--primary)" }}>{progress}%</span>
+            <span className="text-xs font-bold text-blue-600">{progress}%</span>
           </div>
           <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "var(--border)" }}>
             <div
               className="h-full rounded-full transition-all duration-500"
-              style={{ width: `${progress}%`, background: "var(--primary)" }}
+              style={{ width: `${progress}%`, background: "linear-gradient(135deg, #0066ff, #00b4ff)" }}
             />
           </div>
         </div>
