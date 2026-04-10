@@ -73,11 +73,11 @@ export function GoalSelectPage() {
             {(Object.entries(CAREER_GOALS) as [CareerGoal, typeof CAREER_GOALS[CareerGoal]][]).map(([key, goal], idx) => {
               const active = selectedGoal === key
               const gradients: Record<CareerGoal, string> = {
-                "data-science": "from-blue-100 to-cyan-100",
-                "ml-engineering": "from-purple-100 to-pink-100",
-                "web-dev": "from-green-100 to-teal-100",
-                "cloud-devops": "from-orange-100 to-amber-100",
-                "cybersecurity": "from-red-100 to-rose-100",
+                "data-science":     "from-blue-100 to-cyan-100",
+                "machine-learning": "from-purple-100 to-pink-100",
+                "web-development":  "from-green-100 to-teal-100",
+                "cloud-computing":  "from-orange-100 to-amber-100",
+                "cybersecurity":    "from-red-100 to-rose-100",
               }
               return (
                 <motion.button
