@@ -1,9 +1,10 @@
 import type { Metadata } from 'next'
-import { Inter, Geist_Mono } from 'next/font/google'
+import { Inter, Geist_Mono, Playfair_Display } from 'next/font/google'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 const geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-geist-mono' })
+const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-playfair' })
 
 export const metadata: Metadata = {
   title: 'SkillReactor – Personalized Skill Roadmap Generator',
@@ -16,8 +17,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${inter.variable} ${geistMono.variable} font-sans antialiased bg-background text-foreground`}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${inter.variable} ${geistMono.variable} ${playfair.variable} font-sans antialiased`}>
         {children}
       </body>
     </html>
