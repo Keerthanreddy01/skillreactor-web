@@ -135,8 +135,7 @@ export function RoadmapPage() {
                   {/* Animated glow background for next step */}
                   {isNext && (
                     <motion.div
-                      className="absolute top-0 right-0 w-32 h-32 rounded-full blur-2xl pointer-events-none"
-                      style={{ background: "var(--primary)" }}
+                      className="absolute top-0 right-0 w-32 h-32 rounded-full blur-2xl pointer-events-none bg-blue-500"
                       animate={{
                         scale: [1, 1.1, 1],
                         opacity: [0.05, 0.1, 0.05],
