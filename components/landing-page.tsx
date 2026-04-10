@@ -135,21 +135,25 @@ function HeroSection() {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35, duration: 0.7 }}
-          className="text-5xl sm:text-6xl md:text-7xl leading-[1.08] mb-8 tracking-tight text-white"
+          className="mb-8 tracking-tight text-white leading-[1.1]"
           style={{ textShadow: "0 2px 12px rgba(0,0,0,0.12)" }}
         >
-          <span className="font-light">Build and </span>
-          <span className="font-serif italic font-normal">Growth</span>
-          <span className="font-light"> with</span>
-          <br />
-          <span className="font-light">Scalable Tools</span>
+          <span className="block text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light">
+            Build and
+          </span>
+          <span className="block text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-serif italic font-semibold text-white">
+            Growth
+          </span>
+          <span className="block text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light">
+            with Scalable Tools
+          </span>
         </motion.h1>
 
         <motion.p
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.6 }}
-          className="text-base md:text-lg text-white/80 max-w-xl mx-auto mb-10 leading-relaxed"
+          className="text-base md:text-lg text-white/75 max-w-2xl mx-auto mb-12 leading-relaxed font-light"
         >
           Easily adapt to changes and scale your operations with our flexible
           infrastructure, designed to support your business growth.
@@ -161,18 +165,29 @@ function HeroSection() {
           transition={{ delay: 0.62, duration: 0.5 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
-          <Link
-            href="/login"
-            className="px-8 py-4 rounded-full bg-gray-900 text-white font-semibold text-sm hover:bg-gray-800 transition-colors shadow-xl shadow-black/20"
+          <motion.div
+            whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(0,0,0,0.25)" }}
+            whileTap={{ scale: 0.98 }}
           >
-            Get Started
-          </Link>
-          <a
+            <Link
+              href="/login"
+              className="px-8 py-4 rounded-full bg-gray-900 text-white font-semibold text-sm hover:bg-gray-800 transition-all duration-200 shadow-2xl shadow-black/30 inline-block"
+              style={{
+                boxShadow: "0 0 40px rgba(17, 24, 39, 0.4), inset 0 1px 0 rgba(255,255,255,0.1)",
+              }}
+            >
+              Get Started
+            </Link>
+          </motion.div>
+          <motion.a
             href="#features"
-            className="px-8 py-4 rounded-full bg-white text-gray-800 font-semibold text-sm border border-white/60 hover:bg-gray-50 transition-colors shadow-lg"
+            whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.95)" }}
+            whileTap={{ scale: 0.98 }}
+            className="px-8 py-4 rounded-full bg-white/80 text-gray-800 font-semibold text-sm border border-white/60 hover:bg-white transition-all duration-200 shadow-lg cursor-pointer inline-block"
+            style={{ backdropFilter: "blur(12px)" }}
           >
             Learn More
-          </a>
+          </motion.a>
         </motion.div>
       </div>
 
@@ -185,16 +200,16 @@ function HeroSection() {
 
           {/* Left card — Transactions */}
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9, duration: 0.7 }}
-            className="absolute left-[2%] sm:left-[6%] bottom-0 w-52 sm:w-60"
-            style={{ rotate: "-6deg" }}
+            initial={{ opacity: 0, y: 40, rotate: -10 }}
+            animate={{ opacity: 1, y: 0, rotate: -6 }}
+            transition={{ delay: 0.9, duration: 0.8, ease: "easeOut" }}
+            className="absolute left-[2%] sm:left-[6%] bottom-0 w-52 sm:w-60 cursor-grab active:cursor-grabbing"
+            whileHover={{ scale: 1.02, y: -4 }}
           >
             <motion.div
-              animate={{ y: [0, -8, 0] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-              className="bg-white rounded-3xl p-5 shadow-2xl border border-gray-100"
+              animate={{ y: [0, -12, 0] }}
+              transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
+              className="bg-white rounded-3xl p-5 shadow-2xl shadow-black/15 border border-gray-100/50 backdrop-filter backdrop-blur-sm"
             >
               <p className="text-gray-400 text-xs mb-1 font-medium tracking-wide">OVERVIEW</p>
               <h3 className="text-gray-800 font-semibold text-base mb-3">Transactions</h3>
@@ -224,16 +239,17 @@ function HeroSection() {
 
           {/* Center card — Card user */}
           <motion.div
-            initial={{ opacity: 0, y: 60 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.0, duration: 0.7 }}
-            className="absolute left-1/2 bottom-8 sm:bottom-12 w-60 sm:w-68"
+            initial={{ opacity: 0, y: 60, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ delay: 1.0, duration: 0.8, ease: "easeOut" }}
+            className="absolute left-1/2 bottom-8 sm:bottom-12 w-60 sm:w-68 cursor-grab active:cursor-grabbing"
             style={{ translateX: "-50%", zIndex: 10 }}
+            whileHover={{ scale: 1.03, y: -6 }}
           >
             <motion.div
-              animate={{ y: [0, -12, 0] }}
-              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-              className="bg-white rounded-3xl p-6 shadow-2xl border border-gray-100"
+              animate={{ y: [0, -16, 0] }}
+              transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+              className="bg-white rounded-3xl p-6 shadow-2xl shadow-black/15 border border-gray-100/50 backdrop-filter backdrop-blur-sm"
             >
               <div className="flex items-center justify-between mb-5">
                 <h3 className="text-gray-800 font-semibold text-base">Card user</h3>
@@ -276,16 +292,16 @@ function HeroSection() {
 
           {/* Right card — Monthly stats */}
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.1, duration: 0.7 }}
-            className="absolute right-[2%] sm:right-[6%] bottom-4 w-40 sm:w-44"
-            style={{ rotate: "4deg" }}
+            initial={{ opacity: 0, y: 40, rotate: 10 }}
+            animate={{ opacity: 1, y: 0, rotate: 4 }}
+            transition={{ delay: 1.1, duration: 0.8, ease: "easeOut" }}
+            className="absolute right-[2%] sm:right-[6%] bottom-4 w-40 sm:w-44 cursor-grab active:cursor-grabbing"
+            whileHover={{ scale: 1.02, y: -4 }}
           >
             <motion.div
-              animate={{ y: [0, -6, 0] }}
-              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-              className="bg-white rounded-3xl p-4 shadow-2xl border border-gray-100"
+              animate={{ y: [0, -10, 0] }}
+              transition={{ duration: 6.2, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+              className="bg-white rounded-3xl p-4 shadow-2xl shadow-black/15 border border-gray-100/50 backdrop-filter backdrop-blur-sm"
             >
               <div className="flex items-center justify-between mb-3">
                 <span className="text-gray-500 text-xs font-medium">Monthly</span>
