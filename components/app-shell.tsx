@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from "framer-motion"
 const PAGE_TITLES: Record<string, string> = {
   dashboard: "Dashboard",
   roadmap: "My Roadmap",
+  journey: "Learning Journey",
   planner: "Weekly Planner",
   progress: "Progress Tracker",
   mentor: "Chat Mentor",
@@ -102,8 +103,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               }}
             >
               <motion.div
-                className="w-1.5 h-1.5 rounded-full"
-                style={{ background: "var(--primary)" }}
+                className="w-1.5 h-1.5 rounded-full bg-blue-500"
                 animate={{ scale: [1, 1.2, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
               />

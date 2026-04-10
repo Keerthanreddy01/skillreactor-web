@@ -13,12 +13,14 @@ import {
   ChevronRight,
   Target,
   X,
+  Sparkles,
 } from "lucide-react"
 import { motion } from "framer-motion"
 
 const NAV_ITEMS: { label: string; page: Page; icon: React.ReactNode }[] = [
   { label: "Dashboard", page: "dashboard", icon: <LayoutDashboard className="w-4 h-4" /> },
   { label: "Roadmap", page: "roadmap", icon: <Map className="w-4 h-4" /> },
+  { label: "Journey", page: "journey", icon: <Sparkles className="w-4 h-4" /> },
   { label: "Weekly Planner", page: "planner", icon: <CalendarDays className="w-4 h-4" /> },
   { label: "Progress", page: "progress", icon: <TrendingUp className="w-4 h-4" /> },
   { label: "Chat Mentor", page: "mentor", icon: <MessageSquare className="w-4 h-4" /> },

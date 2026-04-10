@@ -6,6 +6,7 @@ import { AuthPage } from "@/components/auth-page"
 import { GoalSelectPage } from "@/components/goal-select-page"
 import { DashboardPage } from "@/components/dashboard-page"
 import { RoadmapPage } from "@/components/roadmap-page"
+import { VisualJourney } from "@/components/visual-journey"
 import { PlannerPage } from "@/components/planner-page"
 import { ProgressPage } from "@/components/progress-page"
 import { MentorPage } from "@/components/mentor-page"
@@ -27,6 +28,7 @@ function AppRouter() {
     <AppShell>
       {currentPage === "dashboard" && <DashboardPage />}
       {currentPage === "roadmap" && <RoadmapPage />}
+      {currentPage === "journey" && <VisualJourney />}
       {currentPage === "planner" && <PlannerPage />}
       {currentPage === "progress" && <ProgressPage />}
       {currentPage === "mentor" && <MentorPage />}

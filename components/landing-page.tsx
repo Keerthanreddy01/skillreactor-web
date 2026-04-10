@@ -11,6 +11,15 @@ import {
   ChevronDown,
   Check,
   ArrowRight,
+  Target,
+  Sparkles,
+  Trophy,
+  Rocket,
+  Brain,
+  Code2,
+  BarChart3,
+  Users,
+  Star,
 } from "lucide-react"
 import Link from "next/link"
 
@@ -36,11 +45,14 @@ function Navbar() {
             : "bg-white/80 shadow-lg shadow-black/5 backdrop-blur-md"
         }`}
       >
-        {/* Logo mark */}
-        <Link href="/" className="flex items-center gap-2 pl-1 pr-2">
+        {/* Logo mark + Brand name */}
+        <Link href="/" className="flex items-center gap-2 pl-1 pr-4">
           <div className="w-9 h-9 rounded-full bg-gray-900 flex items-center justify-center flex-shrink-0">
             <Zap className="w-4 h-4 text-white" />
           </div>
+          <span className="font-bold text-gray-900 text-base tracking-tight hidden sm:inline">
+            SkillReactor
+          </span>
         </Link>
 
         {/* Links */}
@@ -127,7 +139,7 @@ function HeroSection() {
         >
           <span style={{ color: "#f59e0b", fontSize: "1rem" }}>&#9733;</span>
           <span className="text-sm font-semibold text-gray-700 tracking-widest uppercase">
-            From Strategy to Success
+            Personalized Skill Roadmap Generator
           </span>
         </motion.div>
 
@@ -340,6 +352,50 @@ function HeroSection() {
   )
 }
 
+// ─── Infinite Ticker Section ──────────────────────────────────────────────────
+function TickerSection() {
+  const tickerItems = [
+    { icon: <Brain className="w-5 h-5" />, text: "Machine Learning" },
+    { icon: <Code2 className="w-5 h-5" />, text: "Web Development" },
+    { icon: <BarChart3 className="w-5 h-5" />, text: "Data Science" },
+    { icon: <Rocket className="w-5 h-5" />, text: "Cloud Computing" },
+    { icon: <Target className="w-5 h-5" />, text: "Cybersecurity" },
+    { icon: <Sparkles className="w-5 h-5" />, text: "AI & Deep Learning" },
+    { icon: <Users className="w-5 h-5" />, text: "10K+ Learners" },
+    { icon: <Trophy className="w-5 h-5" />, text: "Career Growth" },
+    { icon: <Star className="w-5 h-5" />, text: "Expert Roadmaps" },
+  ]
+
+  return (
+    <section className="py-8 bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-600 overflow-hidden relative">
+      {/* Animated glow overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer" />
+      
+      {/* Double ticker for seamless loop */}
+      <div className="flex">
+        <motion.div
+          className="flex gap-12 items-center whitespace-nowrap"
+          animate={{ x: [0, -1920] }}
+          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+        >
+          {[...tickerItems, ...tickerItems, ...tickerItems].map((item, idx) => (
+            <div
+              key={idx}
+              className="flex items-center gap-3 px-6 py-2"
+            >
+              <div className="text-white/90">{item.icon}</div>
+              <span className="text-white font-semibold text-sm tracking-wide uppercase">
+                {item.text}
+              </span>
+              <div className="w-1.5 h-1.5 rounded-full bg-white/40 ml-6" />
+            </div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
 // ─── Features Section ─────────────────────────────────────────────────────────
 function FeaturesSection() {
   const features = [
@@ -369,25 +425,98 @@ function FeaturesSection() {
     },
   ]
 
+  const featureColors = [
+    { bg: "from-blue-500 to-cyan-400", glow: "rgba(59, 130, 246, 0.3)" },
+    { bg: "from-emerald-500 to-teal-400", glow: "rgba(16, 185, 129, 0.3)" },
+    { bg: "from-purple-500 to-pink-400", glow: "rgba(168, 85, 247, 0.3)" },
+    { bg: "from-orange-500 to-amber-400", glow: "rgba(249, 115, 22, 0.3)" },
+  ]
+
   return (
-    <section id="features" className="py-24 bg-white">
-      <div className="max-w-6xl mx-auto px-6">
+    <section id="features" className="py-24 bg-gradient-to-b from-white to-gray-50 relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full bg-gradient-to-br from-blue-100/40 to-cyan-100/40 blur-3xl pointer-events-none" />
+      
+      <div className="max-w-6xl mx-auto px-6 relative z-10">
+        {/* Section Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
+          <motion.div
+            initial={{ scale: 0 }}
+            whileInView={{ scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ type: "spring", delay: 0.2 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 text-blue-700 text-sm font-semibold mb-6"
+          >
+            <Sparkles className="w-4 h-4" />
+            Powerful Features
+          </motion.div>
+          <h2 className="text-4xl md:text-5xl leading-tight mb-4 tracking-tight">
+            <span className="font-light text-gray-800">Everything you need to </span>
+            <span className="font-serif italic bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">succeed</span>
+          </h2>
+          <p className="text-lg text-gray-500 max-w-xl mx-auto">
+            Comprehensive tools designed to accelerate your learning journey
+          </p>
+        </motion.div>
+
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {features.map((feature, idx) => (
             <motion.div
               key={feature.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 40, rotateX: -15 }}
+              whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
               viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-              whileHover={{ y: -6 }}
-              className="bg-white rounded-2xl p-6 border border-gray-100 hover:border-sky-200 hover:shadow-xl hover:shadow-sky-100/50 transition-all duration-300"
+              transition={{ duration: 0.6, delay: idx * 0.1 }}
+              whileHover={{ y: -8, scale: 1.02 }}
+              className="group relative bg-white rounded-3xl p-6 border border-gray-100 transition-all duration-500 cursor-pointer"
+              style={{
+                boxShadow: "0 4px 24px rgba(0,0,0,0.04)",
+              }}
             >
-              <div className="w-12 h-12 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center mb-5">
+              {/* Hover glow effect */}
+              <motion.div
+                className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10"
+                style={{
+                  background: `radial-gradient(circle at center, ${featureColors[idx].glow} 0%, transparent 70%)`,
+                  filter: "blur(20px)",
+                }}
+              />
+              
+              {/* Animated border on hover */}
+              <div className="absolute inset-0 rounded-3xl border-2 border-transparent group-hover:border-blue-200 transition-colors duration-300" />
+              
+              {/* Icon with gradient */}
+              <motion.div
+                className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${featureColors[idx].bg} text-white flex items-center justify-center mb-5 shadow-lg`}
+                whileHover={{ rotate: [0, -10, 10, 0], scale: 1.1 }}
+                transition={{ duration: 0.5 }}
+                style={{
+                  boxShadow: `0 8px 24px ${featureColors[idx].glow}`,
+                }}
+              >
                 {feature.icon}
-              </div>
-              <h3 className="text-base font-semibold text-gray-800 mb-3 leading-snug">{feature.title}</h3>
+              </motion.div>
+              
+              <h3 className="text-lg font-bold text-gray-800 mb-3 leading-snug group-hover:text-blue-600 transition-colors">
+                {feature.title}
+              </h3>
               <p className="text-gray-500 text-sm leading-relaxed">{feature.description}</p>
+              
+              {/* Learn more link */}
+              <motion.div
+                className="mt-4 flex items-center gap-1 text-sm font-semibold text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                initial={{ x: -10 }}
+                whileHover={{ x: 0 }}
+              >
+                Learn more
+                <ArrowRight className="w-4 h-4" />
+              </motion.div>
             </motion.div>
           ))}
         </div>
@@ -399,58 +528,531 @@ function FeaturesSection() {
 // ─── How It Works ─────────────────────────────────────────────────────────────
 function HowItWorksSection() {
   const steps = [
-    { number: "01", title: "Choose Your Goal", description: "Select from Data Science, ML, Web Dev, Cloud, or Cybersecurity." },
-    { number: "02", title: "Get Your Roadmap", description: "Receive a personalized learning path based on your skill level." },
-    { number: "03", title: "Track Progress", description: "Complete weekly goals and watch your skills grow every week." },
-    { number: "04", title: "Achieve Success", description: "Master new skills and advance your tech career confidently." },
+    { 
+      number: "01", 
+      title: "Choose Your Goal", 
+      description: "Select from Data Science, ML, Web Dev, Cloud, or Cybersecurity.",
+      icon: <Target className="w-7 h-7" />,
+      gradient: "from-blue-500 to-cyan-400",
+      glowColor: "rgba(59, 130, 246, 0.4)",
+    },
+    { 
+      number: "02", 
+      title: "Get Your Roadmap", 
+      description: "Receive a personalized learning path based on your skill level.",
+      icon: <Map className="w-7 h-7" />,
+      gradient: "from-purple-500 to-pink-400",
+      glowColor: "rgba(168, 85, 247, 0.4)",
+    },
+    { 
+      number: "03", 
+      title: "Track Progress", 
+      description: "Complete weekly goals and watch your skills grow every week.",
+      icon: <TrendingUp className="w-7 h-7" />,
+      gradient: "from-emerald-500 to-teal-400",
+      glowColor: "rgba(16, 185, 129, 0.4)",
+    },
+    { 
+      number: "04", 
+      title: "Achieve Success", 
+      description: "Master new skills and advance your tech career confidently.",
+      icon: <Trophy className="w-7 h-7" />,
+      gradient: "from-amber-500 to-orange-400",
+      glowColor: "rgba(245, 158, 11, 0.4)",
+    },
   ]
 
   return (
-    <section id="how-it-works" className="py-24 bg-gradient-to-b from-white to-sky-50">
-      <div className="max-w-6xl mx-auto px-6">
+    <section id="how-it-works" className="py-28 bg-gradient-to-b from-gray-50 via-white to-blue-50 relative overflow-hidden">
+      {/* Animated background shapes */}
+      <motion.div
+        className="absolute top-20 left-10 w-72 h-72 rounded-full bg-blue-200/30 blur-3xl"
+        animate={{ x: [0, 30, 0], y: [0, -20, 0] }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="absolute bottom-20 right-10 w-96 h-96 rounded-full bg-purple-200/30 blur-3xl"
+        animate={{ x: [0, -40, 0], y: [0, 30, 0] }}
+        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+      />
+      
+      <div className="max-w-6xl mx-auto px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-20"
         >
-          <h2 className="text-4xl md:text-5xl leading-tight mb-4 tracking-tight">
+          <motion.div
+            initial={{ scale: 0, rotate: -180 }}
+            whileInView={{ scale: 1, rotate: 0 }}
+            viewport={{ once: true }}
+            transition={{ type: "spring", delay: 0.2 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 text-sm font-semibold mb-6"
+          >
+            <Rocket className="w-4 h-4" />
+            Simple 4-Step Process
+          </motion.div>
+          <h2 className="text-4xl md:text-6xl leading-tight mb-4 tracking-tight">
             <span className="font-light text-gray-800">How it </span>
-            <span className="font-serif italic text-gray-800">works</span>
+            <span className="font-serif italic bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 bg-clip-text text-transparent">works</span>
           </h2>
           <p className="text-lg text-gray-500 max-w-xl mx-auto">
-            Four simple steps to transform your learning journey
+            Transform your learning journey in four simple steps
           </p>
         </motion.div>
 
         <div className="relative">
-          {/* Connecting line — positioned manually to align with step circles */}
-          <div
-            className="hidden md:block absolute top-10 h-0.5 bg-gradient-to-r from-sky-200 via-sky-400 to-sky-200"
-            style={{ left: "12.5%", right: "12.5%" }}
-          />
+          {/* Animated connecting line with gradient and glow */}
+          <div className="hidden lg:block absolute top-24 h-1 rounded-full overflow-hidden" style={{ left: "10%", right: "10%" }}>
+            <div className="h-full bg-gradient-to-r from-blue-400 via-purple-400 via-emerald-400 to-amber-400 opacity-30" />
+            <motion.div
+              className="absolute inset-0 h-full bg-gradient-to-r from-blue-500 via-purple-500 via-emerald-500 to-amber-500"
+              initial={{ scaleX: 0, transformOrigin: "left" }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.5, delay: 0.5, ease: "easeOut" }}
+            />
+          </div>
 
-          <div className="grid md:grid-cols-4 gap-8">
+          {/* Animated dots on the line */}
+          <div className="hidden lg:flex absolute top-[92px] justify-between" style={{ left: "10%", right: "10%" }}>
+            {steps.map((_, idx) => (
+              <motion.div
+                key={idx}
+                className="w-4 h-4 rounded-full bg-white border-2"
+                style={{ borderColor: idx === 0 ? "#3b82f6" : idx === 1 ? "#a855f7" : idx === 2 ? "#10b981" : "#f59e0b" }}
+                initial={{ scale: 0 }}
+                whileInView={{ scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.5 + idx * 0.2, type: "spring" }}
+              />
+            ))}
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {steps.map((step, idx) => (
               <motion.div
                 key={step.number}
-                initial={{ opacity: 0, y: 28 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.5, delay: idx * 0.15 }}
-                className="relative text-center"
+                transition={{ duration: 0.6, delay: idx * 0.15, type: "spring" }}
+                className="relative text-center group"
               >
-                <div className="w-20 h-20 rounded-2xl bg-white border-2 border-sky-200 font-bold text-xl text-sky-600 flex items-center justify-center mx-auto mb-5 shadow-lg shadow-sky-100 relative z-10">
-                  {step.number}
-                </div>
-                <h3 className="text-base font-semibold text-gray-800 mb-2">{step.title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{step.description}</p>
+                {/* Glowing card */}
+                <motion.div
+                  className="relative bg-white rounded-3xl p-8 border border-gray-100 transition-all duration-500"
+                  whileHover={{ y: -12, scale: 1.03 }}
+                  style={{
+                    boxShadow: "0 4px 24px rgba(0,0,0,0.06)",
+                  }}
+                >
+                  {/* Hover glow */}
+                  <motion.div
+                    className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10"
+                    style={{
+                      background: `radial-gradient(circle at center, ${step.glowColor} 0%, transparent 70%)`,
+                      filter: "blur(30px)",
+                    }}
+                  />
+                  
+                  {/* Step number badge */}
+                  <motion.div
+                    className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gray-900 text-white text-xs font-bold"
+                    initial={{ y: -20, opacity: 0 }}
+                    whileInView={{ y: 0, opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.3 + idx * 0.15 }}
+                  >
+                    STEP {step.number}
+                  </motion.div>
+                  
+                  {/* Icon container with animated gradient */}
+                  <motion.div
+                    className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${step.gradient} text-white flex items-center justify-center mx-auto mb-6 shadow-xl relative overflow-hidden`}
+                    whileHover={{ rotate: [0, -5, 5, 0], scale: 1.1 }}
+                    transition={{ duration: 0.5 }}
+                    style={{
+                      boxShadow: `0 12px 32px ${step.glowColor}`,
+                    }}
+                  >
+                    {/* Animated shine effect */}
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                      animate={{ x: [-100, 100] }}
+                      transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                    />
+                    {step.icon}
+                  </motion.div>
+                  
+                  <h3 className="text-xl font-bold text-gray-800 mb-3 group-hover:text-gray-900 transition-colors">
+                    {step.title}
+                  </h3>
+                  <p className="text-gray-500 text-sm leading-relaxed">{step.description}</p>
+                  
+                  {/* Animated arrow for next step */}
+                  {idx < 3 && (
+                    <motion.div
+                      className="hidden lg:flex absolute -right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white shadow-lg items-center justify-center z-20"
+                      animate={{ x: [0, 4, 0] }}
+                      transition={{ duration: 1.5, repeat: Infinity }}
+                    >
+                      <ArrowRight className="w-4 h-4 text-gray-400" />
+                    </motion.div>
+                  )}
+                </motion.div>
               </motion.div>
             ))}
           </div>
         </div>
+        
+        {/* Bottom CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.8 }}
+          className="text-center mt-16"
+        >
+          <motion.button
+            whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(59, 130, 246, 0.3)" }}
+            whileTap={{ scale: 0.98 }}
+            className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold text-sm shadow-xl"
+          >
+            <Sparkles className="w-4 h-4" />
+            Start Your Journey Now
+            <ArrowRight className="w-4 h-4" />
+          </motion.button>
+        </motion.div>
       </div>
+    </section>
+  )
+}
+
+// ─── About Us Section (Sky Background with Floating Cards) ────────────────────
+function AboutSection() {
+  return (
+    <section className="relative min-h-[700px] overflow-hidden">
+      {/* Sky background image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `linear-gradient(to bottom, rgba(135, 206, 235, 0.3), rgba(135, 206, 235, 0.1)), 
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 800'%3E%3Cdefs%3E%3ClinearGradient id='sky' x1='0%25' y1='0%25' x2='0%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%2387CEEB'/%3E%3Cstop offset='50%25' style='stop-color:%23b0e0e6'/%3E%3Cstop offset='100%25' style='stop-color:%23e0f4f8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23sky)' width='1440' height='800'/%3E%3C/svg%3E")`,
+        }}
+      />
+      
+      {/* Animated clouds */}
+      <motion.div
+        className="absolute top-20 left-10 w-64 h-32 bg-white/40 rounded-full blur-3xl"
+        animate={{ x: [0, 100, 0] }}
+        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+      />
+      <motion.div
+        className="absolute top-40 right-20 w-96 h-48 bg-white/30 rounded-full blur-3xl"
+        animate={{ x: [0, -80, 0] }}
+        transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+      />
+      <motion.div
+        className="absolute bottom-40 left-1/4 w-80 h-40 bg-white/35 rounded-full blur-3xl"
+        animate={{ x: [0, 60, 0] }}
+        transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+      />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 py-24">
+        <div className="flex items-center justify-between min-h-[500px]">
+          {/* Left floating card - Learning Progress */}
+          <motion.div
+            initial={{ opacity: 0, x: -60, rotate: -8 }}
+            whileInView={{ opacity: 1, x: 0, rotate: -6 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="hidden lg:block"
+          >
+            <motion.div
+              animate={{ y: [0, -15, 0] }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              className="bg-white rounded-3xl p-6 shadow-2xl shadow-black/10 w-56"
+            >
+              <p className="text-gray-500 text-xs font-medium mb-1">LEARNING</p>
+              <h4 className="text-gray-800 font-semibold mb-4">Skills Mastered</h4>
+              <div className="flex items-baseline gap-2 mb-4">
+                <span className="text-5xl font-bold text-blue-600">85%</span>
+                <span className="text-emerald-500 text-sm font-semibold flex items-center gap-1">
+                  <TrendingUp className="w-3 h-3" />
+                  12%
+                </span>
+              </div>
+              <div className="flex gap-1 h-12 items-end">
+                {[40, 55, 45, 70, 60, 85, 75, 90, 65, 80].map((h, i) => (
+                  <div
+                    key={i}
+                    className="flex-1 rounded-sm"
+                    style={{ height: `${h}%`, background: "linear-gradient(to top, #3b82f6, #60a5fa)" }}
+                  />
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+
+          {/* Center content */}
+          <div className="flex-1 text-center px-4 lg:px-12">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              {/* Badge */}
+              <motion.div
+                initial={{ scale: 0 }}
+                whileInView={{ scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ type: "spring", delay: 0.2 }}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm text-gray-700 text-sm font-semibold mb-8 shadow-lg"
+              >
+                <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
+                JOIN US
+              </motion.div>
+
+              {/* Heading */}
+              <h2 className="text-4xl md:text-5xl lg:text-6xl leading-tight mb-6 tracking-tight">
+                <span className="font-light text-gray-800">Achieve learning excellence</span>
+                <br />
+                <span className="font-light text-gray-800">with </span>
+                <span className="font-serif italic bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+                  SkillReactor
+                </span>
+              </h2>
+
+              {/* Description */}
+              <p className="text-gray-600 text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
+                Founded by tech experts, we create personalized skill roadmaps and learning paths 
+                tailored for aspiring developers of all levels.
+              </p>
+
+              {/* CTA Button */}
+              <motion.button
+                whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(0,0,0,0.15)" }}
+                whileTap={{ scale: 0.98 }}
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-gray-900 text-white font-semibold text-sm shadow-xl"
+              >
+                Get Started
+                <ArrowRight className="w-4 h-4" />
+              </motion.button>
+            </motion.div>
+          </div>
+
+          {/* Right floating card - Career Progress */}
+          <motion.div
+            initial={{ opacity: 0, x: 60, rotate: 8 }}
+            whileInView={{ opacity: 1, x: 0, rotate: 6 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="hidden lg:block"
+          >
+            <motion.div
+              animate={{ y: [0, -20, 0] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+              className="bg-white rounded-3xl p-6 shadow-2xl shadow-black/10 w-60"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
+                  <Target className="w-5 h-5 text-blue-600" />
+                </div>
+              </div>
+              <p className="text-gray-500 text-xs font-medium mb-1">CAREER</p>
+              <h4 className="text-gray-800 font-semibold text-lg mb-2">Goals Achieved</h4>
+              <div className="text-3xl font-bold text-gray-800 mb-3">$2,999</div>
+              <p className="text-gray-500 text-xs mb-3">Average salary increase</p>
+              {/* Progress bar */}
+              <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                <motion.div
+                  className="h-full rounded-full"
+                  style={{ background: "linear-gradient(to right, #3b82f6, #06b6d4)" }}
+                  initial={{ width: 0 }}
+                  whileInView={{ width: "60%" }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1, delay: 0.8 }}
+                />
+              </div>
+              <p className="text-blue-600 text-xs font-semibold mt-2">60% to next milestone</p>
+            </motion.div>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Bottom gradient fade */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent" />
+    </section>
+  )
+}
+
+// ─── Benefits Section (Sky Background with Stats & Cards) ─────────────────────
+function BenefitsSection() {
+  const stats = [
+    { value: "80%", label: "Faster learning", sublabel: "compared to traditional" },
+    { value: "10K+", label: "Active learners", sublabel: "worldwide" },
+    { value: "99%", label: "Satisfaction rate", sublabel: "from our users" },
+  ]
+
+  const benefits = [
+    {
+      icon: <Map className="w-6 h-6" />,
+      title: "Personalized Roadmaps",
+      description: "Get a custom learning path based on your current skills, goals, and available time to study each week.",
+    },
+    {
+      icon: <CalendarDays className="w-6 h-6" />,
+      title: "Weekly Planning",
+      description: "Break down your learning into manageable weekly goals with our intelligent task scheduling system.",
+    },
+    {
+      icon: <TrendingUp className="w-6 h-6" />,
+      title: "Progress Tracking",
+      description: "Monitor your advancement with detailed analytics, streak tracking, and milestone celebrations.",
+    },
+    {
+      icon: <MessageSquare className="w-6 h-6" />,
+      title: "AI Mentor Support",
+      description: "Get personalized guidance and answers to your questions from our AI-powered learning assistant.",
+    },
+  ]
+
+  return (
+    <section className="relative min-h-[800px] overflow-hidden">
+      {/* Sky gradient background */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: "linear-gradient(180deg, #e0f4f8 0%, #b0e0e6 30%, #87CEEB 70%, #b0e0e6 100%)",
+        }}
+      />
+
+      {/* Animated clouds */}
+      <motion.div
+        className="absolute top-32 left-0 w-96 h-48 bg-white/40 rounded-full blur-3xl"
+        animate={{ x: [0, 150, 0] }}
+        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+      />
+      <motion.div
+        className="absolute bottom-48 right-0 w-80 h-40 bg-white/30 rounded-full blur-3xl"
+        animate={{ x: [0, -120, 0] }}
+        transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+      />
+
+      <div className="relative z-10 max-w-6xl mx-auto px-6 py-20">
+        {/* Stats Row */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="flex flex-wrap justify-center gap-8 md:gap-16 mb-16"
+        >
+          {stats.map((stat, idx) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.1 }}
+              className="text-center"
+            >
+              <div className="text-5xl md:text-6xl font-bold text-gray-800 mb-1">{stat.value}</div>
+              <div className="text-gray-700 font-medium">{stat.label}</div>
+              <div className="text-gray-500 text-sm">{stat.sublabel}</div>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Section Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
+          <motion.div
+            initial={{ scale: 0 }}
+            whileInView={{ scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ type: "spring", delay: 0.2 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm text-gray-700 text-sm font-semibold mb-6 shadow-lg"
+          >
+            <Sparkles className="w-4 h-4 text-amber-500" />
+            BENEFITS
+          </motion.div>
+
+          <h2 className="text-4xl md:text-5xl lg:text-6xl leading-tight mb-4 tracking-tight">
+            <span className="font-serif italic text-gray-800">Make learning easy,</span>
+            <br />
+            <span className="font-serif italic text-gray-800">simplify your journey</span>
+          </h2>
+
+          <p className="text-gray-600 text-lg max-w-2xl mx-auto leading-relaxed">
+            Easily adapt to changes and scale your skills with our flexible learning infrastructure, 
+            designed to support your career growth.
+          </p>
+        </motion.div>
+
+        {/* Benefits Cards Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          {benefits.map((benefit, idx) => (
+            <motion.div
+              key={benefit.title}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: idx * 0.1 }}
+              whileHover={{ y: -8, scale: 1.02 }}
+              className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-xl shadow-black/5 border border-white/50 transition-all duration-300 group cursor-pointer"
+            >
+              <div className="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center mb-5 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                {benefit.icon}
+              </div>
+              <h3 className="text-lg font-bold text-gray-800 mb-3 group-hover:text-blue-600 transition-colors">
+                {benefit.title}
+              </h3>
+              <p className="text-gray-500 text-sm leading-relaxed">{benefit.description}</p>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* CTA Button */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.5 }}
+          className="text-center"
+        >
+          <motion.button
+            whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(0,0,0,0.15)" }}
+            whileTap={{ scale: 0.98 }}
+            className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-gray-900 text-white font-semibold text-sm shadow-xl"
+          >
+            Get Started
+            <ArrowRight className="w-4 h-4" />
+          </motion.button>
+        </motion.div>
+      </div>
+
+      {/* Bottom Features badge teaser */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+      >
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm text-gray-700 text-sm font-semibold shadow-lg">
+          <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
+          FEATURES
+        </div>
+      </motion.div>
     </section>
   )
 }
@@ -515,7 +1117,7 @@ function CTASection() {
   )
 }
 
-// ─── Footer ───────────────────────────────────────────────────────────────────
+// ─── Footer ─────���─────────────────────────────────────────────────────────────
 function Footer() {
   return (
     <footer className="py-12 bg-white border-t border-gray-100">
@@ -549,6 +1151,9 @@ export function LandingPage() {
     <main className="min-h-screen bg-white">
       <Navbar />
       <HeroSection />
+      <TickerSection />
+      <AboutSection />
+      <BenefitsSection />
       <FeaturesSection />
       <HowItWorksSection />
       <CTASection />
